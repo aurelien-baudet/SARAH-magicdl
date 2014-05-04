@@ -1,3 +1,4 @@
+debugger;
 var RssSearch = require('../lib/search/RssSearch'),
 	AndFilter = require('../lib/filter/AndFilter'),
 	RegexpListFilter = require('../lib/filter/RegexpListFilter'),
@@ -5,7 +6,7 @@ var RssSearch = require('../lib/search/RssSearch'),
 	RegexpNameProvider = require('../lib/nameProvider/RegexpNameProvider'),
 	HtmlParserUrlProvider = require('../lib/urlProvider/HtmlParserUrlProvider'),
 	FreeboxDownloader = require('../lib/downloader/FreeboxDownloader'),
-	FreeboxAirMedia = require('../lib/player/freeboxairmedia'),
+	FreeboxAirMedia = require('../lib/player/FreeboxAirMedia'),
 	Manager = require('../lib/Manager'),
 	JsonStore = require('../lib/store/JsonStore'),
 	BestNameMatcher = require('../lib/matcher/BestNameMatcher'),

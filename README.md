@@ -16,8 +16,12 @@ De plus, il est totalement extensible pour que vous puissiez rajouter :
  - Votre propre outil de téléchargement
  - Vos propres lecteurs
 
-Ce plugin utilise une version modifiée de l'utilitaire pour commander la freebox (https://github.com/guillaumewuip/freeboxApi_node)
-Les sources sont disponibles sur GitHub: https://github.com/aurelien-baudet/SARAH-magicdl.git
+Ce plugin utilise une version modifiée de l'utilitaire pour commander la freebox (https://github.com/guillaumewuip/freeboxApi_node).
+
+
+# Tester
+
+
 
 
 
