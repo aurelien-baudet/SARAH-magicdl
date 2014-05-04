@@ -1,0 +1,20 @@
+<grammar version="1.0" xml:lang="fr-FR" mode="voice" root="ruleXBMC" xmlns="http://www.w3.org/2001/06/grammar" tag-format="semantics/1.0">
+ 
+  <rule id="ruleXBMC" scope="public">
+    <example>SARAH y a t'il de nouvelles séries</example>
+    <tag>out.action=new Object(); </tag>
+    <item>SARAH</item>
+    
+    <one-of>
+      <item>Y a t'il de nouvelles séries<tag>out.action.command="series"</tag></item>
+      <item>nouvelles séries<tag>out.action.command="series"</tag></item>
+      <item>télécharge mes séries<tag>out.action.command="series"</tag></item>
+    </one-of>
+
+    <!--Liste des playlists généré depuis playlist.txt-->
+    <!--{-->
+    <!--}-->
+      <tag>out.action._attributes.uri="http://127.0.0.1:8080/sarah/magicdl";</tag>
+  </rule>
+   
+</grammar>

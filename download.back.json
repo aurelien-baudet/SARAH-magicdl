@@ -1,0 +1,27 @@
+{
+	"series": {
+		"manager": "rss-cpasbien-series+freeboxdl+freeboxairmedia",
+		"list": [{
+			"regexp": "suits.*VOST.*",
+			"directory": "/Disque dur/Séries/suits"
+		}, {
+			"regexp": "arrow.*VOST.*",
+			"directory": "/Disque dur/Séries/Arrow"
+		}, {
+			"regexp": "walking dead.*VOST.*",
+			"directory": "/Disque dur/Séries/Walking dead"
+		}, {
+			"regexp": "the big bang theory.*VOST.*",
+			"directory": "/Disque dur/Séries/The big bang theory"
+		}, {
+			"regexp": "game of thrones.*VOST.*",
+			"directory": "/Disque dur/Séries/Game of thrones"
+		}, {
+			"regexp": "helix.*VOST.*",
+			"directory": "/Disque dur/Séries/Helix"
+		}, {
+			"regexp": "mentalist.*VOST",
+			"directory": "/Disque dur/Séries/Mentalist"
+		}]
+	}
+}

@@ -1,0 +1,8 @@
+{
+  "modules" : { 
+    "magicdl"  : {
+      "description": "Permet de rechercher, télécharger et lire des séries ou des films",
+      "version" : "0.0.1"
+    }
+  }
+}

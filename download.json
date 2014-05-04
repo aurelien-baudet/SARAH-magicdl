@@ -1,0 +1,20 @@
+{
+	"series": {
+		"manager": "rss-cpasbien-series+vuze+vlc",
+		"list": [{
+			"regexp": "suits.*VOST.*"
+		}, {
+			"regexp": "arrow.*VOST.*"
+		}, {
+			"regexp": "walking dead.*VOST.*"
+		}, {
+			"regexp": "the big bang theory.*VOST.*"
+		}, {
+			"regexp": "game of thrones.*VOST.*"
+		}, {
+			"regexp": "helix.*VOST.*"
+		}, {
+			"regexp": "mentalist.*VOST"
+		}]
+	}
+}
