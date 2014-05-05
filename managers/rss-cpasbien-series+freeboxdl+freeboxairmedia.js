@@ -1,4 +1,3 @@
-debugger;
 var RssSearch = require('../lib/search/RssSearch'),
 	AndFilter = require('../lib/filter/AndFilter'),
 	RegexpListFilter = require('../lib/filter/RegexpListFilter'),
