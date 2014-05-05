@@ -3,7 +3,7 @@ var RssSearch = require('../lib/search/RssSearch'),
 	RegexpListFilter = require('../lib/filter/RegexpListFilter'),
 	UnreadFilter = require('../lib/filter/UnreadFilter'),
 	RegexpNameProvider = require('../lib/nameProvider/RegexpNameProvider'),
-	HtmlParserUrlProvider = require('../lib/urlProvider/HtmlParserUrlProvider'),
+	HtmlRegexpUrlProvider = require('../lib/urlProvider/HtmlRegexpUrlProvider'),
 	VuzeDownloader = require('../lib/downloader/VuzeDownloader'),
 	Vlc = require('../lib/player/Vlc'),
 	Manager = require('../lib/Manager'),
@@ -22,7 +22,7 @@ function RssCpasbienSeriesVlc(sarahContext) {
 		new RssSearch("http://www.cpasbien.me/flux_rss.php?mainid=series"),
 		new AndFilter(new RegexpListFilter(conf.list)/*, new UnreadFilter(new JsonStore(directory+'tmp/unread.json'))*/),
 		new RegexpNameProvider(/^(.+) S[0-9]+E[0-9]+.*$/),
-		new HtmlParserUrlProvider(/href="(.+permalien=[^"]+)"/, "http://www.cpasbien.me"),
+		new HtmlRegexpUrlProvider(/href="(.+permalien=[^"]+)"/, "http://www.cpasbien.me"),
 		new VuzeDownloader(sarahContext, new BestNameMatcher(function(download) { return download.TORRENT[0].NAME[0]; })),
 		new Vlc(sarahContext)
 	]);
