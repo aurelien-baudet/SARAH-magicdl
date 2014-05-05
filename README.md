@@ -21,7 +21,11 @@ Ce plugin utilise une version modifiée de l'utilitaire pour commander la freebo
 
 # Tester
 
+## Vous avez une Freebox Revolution
 
+
+
+## Pas de Freebox
 
 
 
