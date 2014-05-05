@@ -46,10 +46,10 @@ Pour indiquer à SARAH la liste des séries que vous souhaitez visionner, il suf
 
 ### Lancer la recherche
 
-Il vous suffit de dire "SARAH lance mes téléchargements"
+Il vous suffit de dire "SARAH télécharge mes séries"
 
 
-## Pas de Freebox
+## Pas de Freebox (utilisation de Vuze et VLC)
 
 ### Mise en place
 
@@ -65,7 +65,7 @@ Pour indiquer à SARAH la liste des séries que vous souhaitez visionner, il suf
 
 ### Lancer la recherche
 
-Il vous suffit de dire "SARAH lance mes téléchargements"
+Il vous suffit de dire "SARAH télécharge mes séries"
 
 
 
