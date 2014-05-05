@@ -46,3 +46,12 @@ TODO
 
 TODO
 
+
+
+# A faire
+
+- Faire des recherches sur The Pirate Bay
+- Faire des recherches de sous-titres correspondant à un film ou épisode de série
+- Pouvoir combiner les recherches (rechercher sur Cpasbien, si non trouvé alors rechercher sur The Pirate Bay)
+- Ajouter un AskFilter (filtre qui utilise SARAH pour demander si le fichier doit être téléchargé)
+- Pouvoir lire sur n'importe quel player DLNA
