@@ -9,6 +9,10 @@
       <item>Y a t'il de nouvelles séries<tag>out.action.command="series"</tag></item>
       <item>nouvelles séries<tag>out.action.command="series"</tag></item>
       <item>télécharge mes séries<tag>out.action.command="series"</tag></item>
+
+      <item>Y a t'il de nouvelles films<tag>out.action.command="movies"</tag></item>
+      <item>nouveaux films<tag>out.action.command="movies"</tag></item>
+      <item>quels sont les nouveaux films<tag>out.action.command="movies"</tag></item>
     </one-of>
 
     <!--Liste des playlists généré depuis playlist.txt-->

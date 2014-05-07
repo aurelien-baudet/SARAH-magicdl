@@ -162,7 +162,7 @@ function AcceptFilter() {
 util.inherits(AcceptFilter, EventEmitter);
 
 
-AcceptFilter.prototype.accept = function(item, idx, items) {
+AcceptFilter.prototype.accept = function(/*Item*/item, /*Integer*/idx, /*Item[]*/items) {
 	setTimeout(this.emit.bind(this, 'accepted', item), 0);
 	setTimeout(this.emit.bind(this, 'done', item), 0);
 }
@@ -201,8 +201,8 @@ function NullNameProvider() {
 util.inherits(NullNameProvider, EventEmitter);
 
 
-NullNameProvider.prototype.setSpeakName = function(item) {
-	item.setSpeakName(item.getName());
+NullNameProvider.prototype.setSpeakName = function(/*Item*/item) {
+	item.setSpeakName(item.getSpeakName());
 	setTimeout(this.emit.bind(this, 'done', item), 0);
 }
 
@@ -241,8 +241,8 @@ function NullUrlProvider() {
 
 util.inherits(NullUrlProvider, EventEmitter);
 
-NullUrlProvider.prototype.setDownloadUrl = function(item) {
-	item.setDownloadUrl(item.getUrl());
+NullUrlProvider.prototype.setDownloadUrl = function(/*Item*/item) {
+	item.setDownloadUrl(item.getDownloadUrl());
 	setTimeout(this.emit.bind(this, 'done', item), 0);
 }
 
@@ -281,7 +281,7 @@ function MockDownloader() {
 util.inherits(MockDownloader, EventEmitter);
 
 
-MockDownloader.prototype.start = function(item) {
+MockDownloader.prototype.start = function(/*Item*/item) {
 	this.emit('started', item);
 	item.setPlayUrl("http://foo.bar/movie.avi");
 	setTimeout(this.emit.bind(this, 'downloaded', item), 8000);
@@ -310,7 +310,7 @@ L'interface d'un player est la suivante :
 function MockPlayer() {
 }
 
-MockPlayer.prototype.play = function(item) {
+MockPlayer.prototype.play = function(/*Item*/item) {
 	// just start playing
 	console.log("start playing "+item.getName());
 }
@@ -346,7 +346,7 @@ var MockSearch = require('../lib/search/MockSearch'),
 	NullUrlProvider = require('../lib/urlProvider/NullUrlProvider'),
 	MockDownloader = require('../lib/downloader/MockDownloader'),
 	MockPlayer = require('../lib/player/MockPlayer'),
-	Manager = require('../lib/Manager'),
+	Manager = require('../lib/manager/FullAsyncManager'),
 	fs = require('fs'),
 	util = require('util');
 	

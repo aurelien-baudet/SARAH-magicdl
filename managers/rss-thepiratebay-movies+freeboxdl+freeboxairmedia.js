@@ -1,14 +1,16 @@
 var RssSearch = require('../lib/search/RssSearch'),
 	AndFilter = require('../lib/filter/AndFilter'),
-	RegexpListFilter = require('../lib/filter/RegexpListFilter'),
+	AskFilter = require('../lib/filter/AskFilter'),
 	UnreadFilter = require('../lib/filter/UnreadFilter'),
 	CompoundNameProvider = require('../lib/nameProvider/CompoundNameProvider'),
 	TrimNameProvider = require('../lib/nameProvider/TrimNameProvider'),
 	RegexpNameProvider = require('../lib/nameProvider/RegexpNameProvider'),
-	HtmlRegexpUrlProvider = require('../lib/urlProvider/HtmlRegexpUrlProvider'),
+	NullUrlProvider = require('../lib/urlProvider/NullUrlProvider'),
 	FreeboxDownloader = require('../lib/downloader/FreeboxDownloader'),
 	FreeboxAirMedia = require('../lib/player/FreeboxAirMedia'),
-	Manager = require('../lib/manager/FullAsyncManager'),
+//	MockDownloader = require('../lib/downloader/MockDownloader'),
+//	MockPlayer = require('../lib/player/MockPlayer'),
+	Manager = require('../lib/manager/StepByStepManager'),
 	JsonStore = require('../lib/store/JsonStore'),
 	BestNameMatcher = require('../lib/matcher/BestNameMatcher'),
 	fs = require('fs'),
@@ -22,11 +24,12 @@ function RssCpasbienSeriesFreebox(sarahContext) {
 	var freeboxConf = JSON.parse(require('fs').readFileSync(directory+'tmp/freeboxApp.json', 'utf8'));
 	Manager.apply(this, [
 		sarahContext,
-		new RssSearch("http://www.cpasbien.me/flux_rss.php?mainid=series"),
-		new AndFilter(new RegexpListFilter(conf.list), new UnreadFilter(new JsonStore(directory+'tmp/unread.json'))),
-		new CompoundNameProvider(new RegexpNameProvider(/S0?([0-9]+)E([0-9]+)/, ""), new RegexpNameProvider(/VOSTFR/, ""), new RegexpNameProvider(/FRENCH/, ""), new RegexpNameProvider(/HDTV/, ""), new TrimNameProvider()),		// short name
-//		new CompoundNameProvider(new RegexpNameProvider(/S0?([0-9]+)E0?([0-9]+)/, "saison $1 épisode $2"), new RegexpNameProvider(/VOSTFR/, "version originale sous titrée"), new RegexpNameProvider(/FRENCH/, "version française"), new RegexpNameProvider(/HDTV/, ""), new TrimNameProvider()),		// long name
-		new HtmlRegexpUrlProvider(/href="(.+permalien=[^"]+)"/, "http://www.cpasbien.me"),
+		new RssSearch("http://rss.thepiratebay.se/201"),
+		new AndFilter(new UnreadFilter(new JsonStore(directory+'tmp/unread.json')), new AskFilter(sarahContext)),
+		new CompoundNameProvider(new RegexpNameProvider(/(VOSTFR|FRENCH|HDTV|XVID|BRRip|x264|HDRIP|AC3|TiTAN| CAM |AAC-SeedPeer|DVDRIP|WEBRIP|\.avi|\.mkv|ACAB|720p).*$/gi, ""), new TrimNameProvider()),		// short name: remove all useless information that is not understandable when earing it
+		new NullUrlProvider(/href="(.+permalien=[^"]+)"/, "http://www.cpasbien.me"),
+//		new MockDownloader(),
+//		new MockPlayer()
 		new FreeboxDownloader(freeboxConf, new BestNameMatcher(function(download) { return download.name; }), conf.list),
 		new FreeboxAirMedia(freeboxConf)
 	]);
@@ -35,11 +38,10 @@ function RssCpasbienSeriesFreebox(sarahContext) {
 util.inherits(RssCpasbienSeriesFreebox, Manager);
 
 RssCpasbienSeriesFreebox.initialize = function(initCtx) {
-	var appFile = initCtx.directory+'tmp/freeboxApp.json';
-	FreeboxDownloader.initialize(initCtx, appFile);
+	FreeboxDownloader.initialize(initCtx, initCtx.directory+'tmp/freeboxApp.json');
 	FreeboxDownloader.ee.on('done', function(appInfo) {
 		if(appInfo) {
-			FreeboxAirMedia.initialize(initCtx, appFile);
+			FreeboxAirMedia.initialize(initCtx, appInfo);
 		}
 	});
 }

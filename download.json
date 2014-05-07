@@ -20,8 +20,11 @@
 			"regexp": "helix.*VOST.*",
 			"directory": "/Disque dur/Séries/Helix"
 		}, {
-			"regexp": "mentalist.*VOST",
+			"regexp": "mentalist.*VOST.*",
 			"directory": "/Disque dur/Séries/Mentalist"
 		}]
+	},
+	"movies": {
+		"manager": "rss-thepiratebay-movies+freeboxdl+freeboxairmedia"
 	}
 }
