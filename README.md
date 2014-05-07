@@ -408,12 +408,9 @@ Pour l'exemple précédent, on créé un manager qui se nomme mock.js dans le do
 
 # A faire
 
-- Commenter le code !
 - Rendre les fichiers téléchargés par vuze accessible sur le réseau pour une lecture à distance (en cours)
-- Faire des recherches sur The Pirate Bay
 - Faire des recherches de sous-titres correspondant à un film ou épisode de série
 - Pouvoir combiner les recherches (exemple : rechercher sur Cpasbien, si non trouvé alors rechercher sur The Pirate Bay)
-- Ajouter un AskFilter (filtre qui utilise SARAH pour demander si le fichier doit être téléchargé ou non)
 - Pouvoir lire sur n'importe quel player DLNA
 - Détection automatique de l'environnement (freebox ou pas, vlc dispo, ...) et adaptation automatique
 - Télécharger des fchiers NZB
