@@ -381,20 +381,20 @@ Et bien pour ça, on utilise le fichier download.json.
 Le format du fichier est le suivant :
 ```JSON
 {
-	"<command1>": {
-		"manager": "<name of manager1>"
+	"{command1}": {
+		"manager": "{name of manager1}"
 	},
-	"<command2>": {
-		"manager": "<name of manager2>",
-		<configuration2>
+	"{command2}": {
+		"manager": "{name of manager2}",
+		{configuration2}
 	}
 }
 ```
 
 Avec :
-- <command1> et <command2> correspondant au nom de la commande définie dans magicdl.xml (actuellement le fichier ne contient qu'une seule commande nommée "series").
-- <name of manager1> et <name of manager2> correspondant au nom du fichier js disponible dans le dossier managers du manager que vous voulez lancer.
-- <configuration2> : des propriétés optionnelles qui peuvent être utilisées dans votre manager.
+- {command1} et {command2} correspondant au nom de la commande définie dans magicdl.xml (actuellement le fichier ne contient qu'une seule commande nommée "series").
+- {name of manager1} et {name of manager2} correspondant au nom du fichier js disponible dans le dossier managers du manager que vous voulez lancer.
+- {configuration2} : des propriétés optionnelles qui peuvent être utilisées dans votre manager.
 
 
 Pour l'exemple précédent, on créé un manager qui se nomme mock.js dans le dossier managers et on le déclare comme suit :
