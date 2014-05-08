@@ -409,6 +409,8 @@ Pour l'exemple précédent, on créé un manager qui se nomme mock.js dans le do
 # A faire
 
 - Rendre les fichiers téléchargés par vuze accessible sur le réseau pour une lecture à distance (en cours)
+- Recherche automatique régulière (cron)
+- Stocker la liste des éléments téléchargés et les injecter dans le ficheir xml pour une lecture ultérieure
 - Faire des recherches de sous-titres correspondant à un film ou épisode de série
 - Pouvoir combiner les recherches (exemple : rechercher sur Cpasbien, si non trouvé alors rechercher sur The Pirate Bay)
 - Pouvoir lire sur n'importe quel player DLNA
