@@ -1,6 +1,5 @@
 {
 	"series": {
-		"manager": "rss-cpasbien-series+freeboxdl+freeboxairmedia",
 		"list": [{
 			"regexp": "suits.*VOST.*",
 			"directory": "/Disque dur/Séries/suits"
@@ -25,6 +24,5 @@
 		}]
 	},
 	"movies": {
-		"manager": "rss-thepiratebay-movies+freeboxdl+freeboxairmedia"
 	}
 }

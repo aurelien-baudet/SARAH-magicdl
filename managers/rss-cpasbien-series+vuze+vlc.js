@@ -12,9 +12,23 @@ var RssSearch = require('../lib/search/RssSearch'),
 	JsonStore = require('../lib/store/JsonStore'),
 	BestNameMatcher = require('../lib/matcher/BestNameMatcher'),
 	fs = require('fs'),
-	util = require('util');
+	util = require('util'),
+	EventEmitter = require('events').EventEmitter,
+	AndDetector = require('../lib/capabilities/AndDetector'),
+	JavaDetector = require('../lib/capabilities/JavaDetector'),
+	VlcDetector = require('../lib/capabilities/VlcDetector');
 	
 
+/**
+ * Manager that:
+ *    - searches series on www.cpasbien.me
+ *    - filters results using a list of regular expressions
+ *    - downloads the found items using Vuze
+ *    - plays them using VLC
+ *    
+ *    
+ * @param sarahContext				the SARAH execution context
+ */
 function RssCpasbienSeriesVlc(sarahContext) {
 	var directory = sarahContext.directory;
 	// TODO: path should be configurable
@@ -25,15 +39,33 @@ function RssCpasbienSeriesVlc(sarahContext) {
 		new AndFilter(new RegexpListFilter(conf.list), new UnreadFilter(new JsonStore(directory+'tmp/unread.json'))),
 		new CompoundNameProvider(new RegexpNameProvider(/^(.+) S[0-9]+E[0-9]+.*$/), new TrimNameProvider()),
 		new HtmlRegexpUrlProvider(/href="(.+permalien=[^"]+)"/, "http://www.cpasbien.me"),
-		new VuzeDownloader(sarahContext, new BestNameMatcher(function(download) { return download.TORRENT[0].NAME[0]; })),
+		new VuzeDownloader(new BestNameMatcher(function(download) { return download.TORRENT[0].NAME[0]; })),
 		new Vlc(sarahContext)
 	]);
 }
 
 util.inherits(RssCpasbienSeriesVlc, Manager);
 
+
+/**
+ * Called when SARAH initializes. Start Vuze in a background process
+ * 
+ * @param initCtx			the SARAH initialization context
+ */
 RssCpasbienSeriesVlc.initialize = function(initCtx) {
 	VuzeDownloader.initialize(initCtx);
+}
+
+
+RssCpasbienSeriesVlc.ee = new EventEmitter();
+
+/**
+ * Execute feature availability detection
+ * 
+ * @param detectCtx				the SARAH context used for detection
+ */
+RssCpasbienSeriesVlc.detect = function(detectCtx) {
+	new AndDetector(new JavaDetector(), new VlcDetector()).detect().on('available', RssCpasbienSeriesVlc.ee.emit.bind(RssCpasbienSeriesVlc.ee, 'available'));
 }
 
 module.exports = RssCpasbienSeriesVlc;

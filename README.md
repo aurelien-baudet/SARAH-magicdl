@@ -24,19 +24,17 @@ Les sources sont disponibles sur GitHub: https://github.com/aurelien-baudet/SARA
 
 # Tester
 
-## Vous avez une Freebox Revolution
+
+## Utiliser l'auto-détéction
 
 ### Introduction
 
-Vous pouvez utiliser votre freebox pour télécharger des films ou séries et les visionner une fois terminés avec le player de votre freebox.
-Utilisez le manager nommé "rss-cpasbien-series+freeboxdl+freeboxairmedia" dans le fichier download.json. Ce manager recherche sur le site Cpasbien les nouvelles séries disponibles (flux RSS).
-Il compare les entrées trouvées avec la liste que vous avez fournie dans le fichier download.json. Si une (ou plusieurs) correspondances sont trouvées, le manager va télécharger ces fichiers
-en utilisant votre freebox. Une fois l'un des téléchargement terminé, SARAH vous propose de lire ce fichier.
+L'auto détection est capable de scanner votre environnement pour savoir ce qui est disponible chez vous. Pour le moment, l'auto détection va vérifier si vous possédez une Freebox et l'utiliser si présente.
+Sinon, elle va tester la présence de Java et de VLC sur le PC où est installé SARAH. Si c'est le cas, alors le téléchargement se fera en local en utilisant Vuze et la lecture se fera avec VLC.
 
-### Autoriser l'application
+### Démarrage
 
-Pour pouvoir piloter votre freebox, l'application SARAH doit être autorisée sur votre freebox. Au premier lancement, SARAH vous demande d'accepter l'application sur votre freebox en choisissant oui sur l'écran
-LCD de votre freebox.
+Si une Freebox est détectée, il faut accepter l'application SARAH sur votre Freebox pour que SARAH puisse la piloter. Au premier lancement, SARAH vous demande d'accepter l'application sur votre freebox en choisissant oui sur l'écran LCD de votre freebox.
 
 ### Choisir vos séries
 
@@ -44,28 +42,172 @@ Pour indiquer à SARAH la liste des séries que vous souhaitez visionner, il suf
 - regexp (obligatoire) : une expression régulière permettant de filtrer les résultats fournis par le flux RSS de Cpasbien
 - directory (optionnel) : le dossier dans lequel le fichier sera téléchargé dans votre freebox
 
-### Lancer la recherche
+exemple :
+```JSON
+{
+	"series": {
+		"list": [{
+			"regexp": "suits.*VOST.*",
+			"directory": "/Disque dur/Séries/suits"
+		}, {
+			"regexp": "arrow.*VOST.*",
+			"directory": "/Disque dur/Séries/Arrow"
+		}, {
+			"regexp": "walking dead.*VOST.*",
+			"directory": "/Disque dur/Séries/Walking dead"
+		}, {
+			"regexp": "the big bang theory.*VOST.*",
+			"directory": "/Disque dur/Séries/The big bang theory"
+		}, {
+			"regexp": "game of thrones.*VOST.*",
+			"directory": "/Disque dur/Séries/Game of thrones"
+		}, {
+			"regexp": "helix.*VOST.*",
+			"directory": "/Disque dur/Séries/Helix"
+		}, {
+			"regexp": "mentalist.*VOST.*",
+			"directory": "/Disque dur/Séries/Mentalist"
+		}]
+	},
+	"movies": {
+	}
+}
+```
 
-Il vous suffit de dire "SARAH télécharge mes séries"
+### Lancer la recherche des séries
+
+Il vous suffit de dire "SARAH télécharge mes séries". SARAH téléchargera automatiquement toutes les séries fournies dans le fichier download.json qui n'ont pas déjà été téléchargées.
 
 
-## Pas de Freebox (utilisation de Vuze et VLC)
+### Lancer la recherche des films
 
-### Mise en place
+Il vous suffit de dire "SARAH télécharge des films". SARAH va chercher sur The Pirate Bay la liste des films récemment ajoutés. Pour chaque nouveau film trouvé, elle vous propose de le télécharger.
+A vous d'accepter ou refuser vocalement le téléchargement.
+
+
+## Mode manuel
+
+### Vous avez une Freebox Revolution
+
+#### Introduction
+
+Vous pouvez utiliser votre freebox pour télécharger des films ou séries et les visionner une fois terminés avec le player de votre freebox.
+Utilisez le manager nommé "rss-cpasbien-series+freeboxdl+freeboxairmedia" dans le fichier download.json. Ce manager recherche sur le site Cpasbien les nouvelles séries disponibles (flux RSS).
+Il compare les entrées trouvées avec la liste que vous avez fournie dans le fichier download.json. Si une (ou plusieurs) correspondances sont trouvées, le manager va télécharger ces fichiers
+en utilisant votre freebox. Une fois l'un des téléchargement terminé, SARAH vous propose de lire ce fichier.
+
+#### Autoriser l'application
+
+Pour pouvoir piloter votre freebox, l'application SARAH doit être autorisée sur votre freebox. Au premier lancement, SARAH vous demande d'accepter l'application sur votre freebox en choisissant oui sur l'écran
+LCD de votre freebox.
+
+#### Choisir vos séries
+
+Pour indiquer à SARAH la liste des séries que vous souhaitez visionner, il suffit d'éditer le fichier download.json et modifier le tableau nommé list. Chaque entrée du tableau est un objet qui contient les informations suivantes :
+- regexp (obligatoire) : une expression régulière permettant de filtrer les résultats fournis par le flux RSS de Cpasbien
+- directory (optionnel) : le dossier dans lequel le fichier sera téléchargé dans votre freebox
+
+exemple :
+```JSON
+{
+	"series": {
+		"manager": "rss-cpasbien-series+freeboxdl+freeboxairmedia",
+		"list": [{
+			"regexp": "suits.*VOST.*",
+			"directory": "/Disque dur/Séries/suits"
+		}, {
+			"regexp": "arrow.*VOST.*",
+			"directory": "/Disque dur/Séries/Arrow"
+		}, {
+			"regexp": "walking dead.*VOST.*",
+			"directory": "/Disque dur/Séries/Walking dead"
+		}, {
+			"regexp": "the big bang theory.*VOST.*",
+			"directory": "/Disque dur/Séries/The big bang theory"
+		}, {
+			"regexp": "game of thrones.*VOST.*",
+			"directory": "/Disque dur/Séries/Game of thrones"
+		}, {
+			"regexp": "helix.*VOST.*",
+			"directory": "/Disque dur/Séries/Helix"
+		}, {
+			"regexp": "mentalist.*VOST.*",
+			"directory": "/Disque dur/Séries/Mentalist"
+		}]
+	},
+	"movies": {
+		"manager": "rss-thepiratebay-movies+freeboxdl+freeboxairmedia"
+	}
+}
+```
+
+#### Lancer la recherche des séries
+
+Il vous suffit de dire "SARAH télécharge mes séries". SARAH téléchargera automatiquement toutes les séries fournies dans le fichier download.json qui n'ont pas déjà été téléchargées.
+
+
+#### Lancer la recherche des films
+
+Il vous suffit de dire "SARAH télécharge des films". SARAH va chercher sur The Pirate Bay la liste des films récemment ajoutés. Pour chaque nouveau film trouvé, elle vous propose de le télécharger.
+A vous d'accepter ou refuser vocalement le téléchargement.
+
+
+
+### Pas de Freebox (utilisation de Vuze et VLC)
+
+#### Mise en place
 
 Si vous ne possédez pas de freebox et que vous voulez tester le plugin, alors il suffit de remplacer le contenu du fichier download.json par celui de download.back.json.
 Vous remplacez alors l'utilisation de la freebox par l'utilisation de Vuze pour télécharger et VLC pour visualiser.
 Vous n'avez pas besoin d'installer Vuze sur votre PC (par contre, il faut Java). J'utilise une version console de Vuze embarquée directement dans le plugin.
 Vous devez par contre installer VLC si ce n'est pas déjà le cas (utilisez le chemin par défaut pour le moment).
 
-### Choisir vos séries
+#### Choisir vos séries
 
 Pour indiquer à SARAH la liste des séries que vous souhaitez visionner, il suffit d'éditer le fichier download.json et modifier le tableau nommé list. Chaque entrée du tableau est un objet qui contient les informations suivantes :
 - regexp (obligatoire) : une expression régulière permettant de filtrer les résultats fournis par le flux RSS de Cpasbien
 
-### Lancer la recherche
+exemple :
+```JSON
+{
+	"series": {
+		"list": [{
+			"regexp": "suits.*VOST.*",
+			"directory": "/Disque dur/Séries/suits"
+		}, {
+			"regexp": "arrow.*VOST.*",
+			"directory": "/Disque dur/Séries/Arrow"
+		}, {
+			"regexp": "walking dead.*VOST.*",
+			"directory": "/Disque dur/Séries/Walking dead"
+		}, {
+			"regexp": "the big bang theory.*VOST.*",
+			"directory": "/Disque dur/Séries/The big bang theory"
+		}, {
+			"regexp": "game of thrones.*VOST.*",
+			"directory": "/Disque dur/Séries/Game of thrones"
+		}, {
+			"regexp": "helix.*VOST.*",
+			"directory": "/Disque dur/Séries/Helix"
+		}, {
+			"regexp": "mentalist.*VOST.*",
+			"directory": "/Disque dur/Séries/Mentalist"
+		}]
+	},
+	"movies": {
+	}
+}
+```
 
-Il vous suffit de dire "SARAH télécharge mes séries"
+#### Lancer la recherche des séries
+
+Il vous suffit de dire "SARAH télécharge mes séries". SARAH téléchargera automatiquement toutes les séries fournies dans le fichier download.json qui n'ont pas déjà été téléchargées.
+
+
+#### Lancer la recherche des films
+
+Il vous suffit de dire "SARAH télécharge des films". SARAH va chercher sur The Pirate Bay la liste des films récemment ajoutés. Pour chaque nouveau film trouvé, elle vous propose de le télécharger.
+A vous d'accepter ou refuser vocalement le téléchargement.
 
 
 
@@ -326,9 +468,12 @@ Il suffit donc d'hériter de cette classe de base en fournissant au constructeur
 
 ### manager existants
 
-Il existe 2 managers :
+Il existe 5 managers :
 - rss-cpasbien-series+freeboxdl+freeboxairmedia : qui utilise les flux RSS de Cpasbien pour trouver les nouvelles séries disponibles, filtre en utilisant des expressions régulières, télécharge avec la freebox et lit les vidéos avec la freebox
 - rss-cpasbien-series+vuze+vlc : qui utilise les flux RSS de Cpasbien pour trouver les nouvelles séries disponibles, filtre en utilisant des expressions régulières, télécharge avec la Vuze et lit les vidéos avec VLC
+- rss-thepiratebay-movies+freeboxdl+freeboxairmedia : qui utilise les flux RSS de The Pirate Bay pour trouver les nouveaux films disponibles, filtre en vous demandant ce que vous souhaitez télécharger, télécharge avec la freebox et lit les vidéos avec la freebox
+- rss-thepiratebay-movies+vuze+vlc : qui utilise les flux RSS de The Pirate Bay pour trouver les nouveaux films disponibles, filtre en vous demandant ce que vous souhaitez télécharger, télécharge avec la Vuze et lit les vidéos avec VLC
+- AutoDetectManager : qui détecte automatiquement quel manager ci-dessus utiliser en fonction de votre environnement
  
 ### Créer son propre manager
 
@@ -406,15 +551,118 @@ Pour l'exemple précédent, on créé un manager qui se nomme mock.js dans le do
 }
 ```
 
+### Utiliser l'auto détection
+
+#### Ajouter la détection à votre manager
+
+Pour pouvoir ajouter la détection à votre manager, vous devez :
+- ajouter la dépendance à EventEmitter
+- ajouter la fonction statique detect
+- déclencher l'évènement 'available' une fois la détection effectuée avec un booléen (true pour pouvoir utiliser votre manager, false sinon)
+
+
+```JavaScript
+var MockSearch = require('../lib/search/MockSearch'),
+	AcceptFilter = require('../lib/filter/AcceptFilter'),
+	NullNameProvider = require('../lib/nameProvider/NullNameProvider'),
+	NullUrlProvider = require('../lib/urlProvider/NullUrlProvider'),
+	MockDownloader = require('../lib/downloader/MockDownloader'),
+	MockPlayer = require('../lib/player/MockPlayer'),
+	Manager = require('../lib/Manager'),
+	fs = require('fs'),
+	util = require('util'),
+	EventEmitter = require('events').EventEmitter;
+	
+
+function Mock(sarahContext) {
+	Manager.apply(this, [
+		sarahContext,
+		new MockSearch(),
+		new AcceptFilter(),
+		new NullNameProvider(),
+		new NullUrlProvider(),
+		new MockDownloader(),
+		new MockPlayer()
+	]);
+}
+
+util.inherits(Mock, Manager);
+
+
+Mock.initialize = function(initCtx) {
+	
+}
+
+
+Mock.ee = new EventEmitter();
+
+Mock.detect = function(detectCtx) {
+	setTimeout(Mock.ee.emit.bind(Mock.ee, 'available', true), 0);
+}
+
+module.exports = Mock;
+```
+
+Dans notre cas, la détection renvoie toujours true et donc notre manager est toujours disponible.
+
+
+#### Utiliser l'AutoDetectManager
+
+Si vous ne spécifiez aucun manager dans le fichier download.json alors, c'est le manager d'auto détection qui est automatiquement utilisé.
+
+Exemple :
+```JSON
+{
+	"series": {
+		"list": [{
+			"regexp": "suits.*VOST.*",
+			"directory": "/Disque dur/Séries/suits"
+		}, {
+			"regexp": "arrow.*VOST.*",
+			"directory": "/Disque dur/Séries/Arrow"
+		}, {
+			"regexp": "walking dead.*VOST.*",
+			"directory": "/Disque dur/Séries/Walking dead"
+		}, {
+			"regexp": "the big bang theory.*VOST.*",
+			"directory": "/Disque dur/Séries/The big bang theory"
+		}, {
+			"regexp": "game of thrones.*VOST.*",
+			"directory": "/Disque dur/Séries/Game of thrones"
+		}, {
+			"regexp": "helix.*VOST.*",
+			"directory": "/Disque dur/Séries/Helix"
+		}, {
+			"regexp": "mentalist.*VOST.*",
+			"directory": "/Disque dur/Séries/Mentalist"
+		}]
+	},
+	"movies": {
+	}
+}
+```
+
+
+Ensuite, pour ajouter votre manager à l'auto détection, il vous suffit d'ajouter une entrée dans le fichier autodetect.json :
+```JSON
+{
+	"series": ["mock", "rss-cpasbien-series+freeboxdl+freeboxairmedia", "rss-cpasbien-series+vuze+vlc"],
+	"movies": ["rss-thepiratebay-movies+freeboxdl+freeboxairmedia", "rss-thepiratebay-movies+vuze+vlc"]
+}
+```
+
+Ici on ajoute le manager mock à la commande 'series'. Ce manager étant le premier de la liste, c'est celui-ci qui sera utilisé si sa détection renvoie true. Sinon on passe au suivant et ainsi de suite.
+
+
 # A faire
 
 - Rendre les fichiers téléchargés par vuze accessible sur le réseau pour une lecture à distance (en cours)
+- Améliorer les noms dictés (surtout avec The Pirate Bay)
 - Recherche automatique régulière (cron)
-- Stocker la liste des éléments téléchargés et les injecter dans le ficheir xml pour une lecture ultérieure
+- Stocker la liste des éléments téléchargés et les injecter dans le fichier xml pour une lecture ultérieure
 - Faire des recherches de sous-titres correspondant à un film ou épisode de série
 - Pouvoir combiner les recherches (exemple : rechercher sur Cpasbien, si non trouvé alors rechercher sur The Pirate Bay)
 - Pouvoir lire sur n'importe quel player DLNA
-- Détection automatique de l'environnement (freebox ou pas, vlc dispo, ...) et adaptation automatique
 - Télécharger des fchiers NZB
 - Information sur la progression du téléchargement
 - Pouvoir combiner les managers
