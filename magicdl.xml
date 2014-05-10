@@ -13,6 +13,7 @@
       <item>Y a t'il de nouvelles films<tag>out.action.command="movies"</tag></item>
       <item>nouveaux films<tag>out.action.command="movies"</tag></item>
       <item>quels sont les nouveaux films<tag>out.action.command="movies"</tag></item>
+      <item>télécharge des films<tag>out.action.command="movies"</tag></item>
     </one-of>
 
     <!--Liste des playlists généré depuis playlist.txt-->

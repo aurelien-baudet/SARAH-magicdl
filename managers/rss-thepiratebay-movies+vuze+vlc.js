@@ -6,15 +6,17 @@ var RssSearch = require('../lib/search/RssSearch'),
 	TrimNameProvider = require('../lib/nameProvider/TrimNameProvider'),
 	RegexpNameProvider = require('../lib/nameProvider/RegexpNameProvider'),
 	NullUrlProvider = require('../lib/urlProvider/NullUrlProvider'),
-	FreeboxDownloader = require('../lib/downloader/FreeboxDownloader'),
-	FreeboxAirMedia = require('../lib/player/FreeboxAirMedia'),
+	VuzeDownloader = require('../lib/downloader/VuzeDownloader'),
+	Vlc = require('../lib/player/Vlc'),
 	Manager = require('../lib/manager/StepByStepManager'),
 	JsonStore = require('../lib/store/JsonStore'),
 	BestNameMatcher = require('../lib/matcher/BestNameMatcher'),
 	fs = require('fs'),
 	util = require('util'),
 	EventEmitter = require('events').EventEmitter,
-	FreeboxDetector = require('../lib/capabilities/FreeboxDetector');
+	AndDetector = require('../lib/capabilities/AndDetector'),
+	JavaDetector = require('../lib/capabilities/JavaDetector'),
+	VlcDetector = require('../lib/capabilities/VlcDetector');
 	
 
 
@@ -28,7 +30,7 @@ var RssSearch = require('../lib/search/RssSearch'),
  *    
  * @param sarahContext				the SARAH execution context
  */
-function RssThepiratebayMoviesFreebox(sarahContext) {
+function RssThepiratebayMoviesVuzeVlc(sarahContext) {
 	var directory = sarahContext.directory;
 	// TODO: path should be configurable
 	var conf = sarahContext.managerConf;
@@ -37,14 +39,14 @@ function RssThepiratebayMoviesFreebox(sarahContext) {
 		sarahContext,
 		new RssSearch("http://rss.thepiratebay.se/201"),
 		new AndFilter(new UnreadFilter(new JsonStore(directory+'tmp/unread.json')), new AskFilter(sarahContext)),
-		new CompoundNameProvider(new RegexpNameProvider(/(VOSTFR|FRENCH|HDTV|XVID|BRRip|x264|HDRIP|AC3|TiTAN| CAM |AAC-SeedPeer|DVDRIP|WEBRIP|\.avi|\.mkv|ACAB|720p420p|1080p|READNFO).*$/gi, ""), new TrimNameProvider()),		// short name: remove all useless information that is not understandable when earing it
+		new CompoundNameProvider(new RegexpNameProvider(/(VOSTFR|FRENCH|HDTV|XVID|BRRip|x264|HDRIP|AC3|TiTAN| CAM |AAC-SeedPeer|DVDRIP|WEBRIP|\.avi|\.mkv|ACAB|720p|420p|1080p|READNFO).*$/gi, ""), new TrimNameProvider()),		// short name: remove all useless information that is not understandable when earing it
 		new NullUrlProvider(),
-		new FreeboxDownloader(freeboxConf, new BestNameMatcher(function(download) { return download.name; }), conf.list),
-		new FreeboxAirMedia(freeboxConf)
+		new VuzeDownloader(new BestNameMatcher(function(download) { return download.TORRENT[0].NAME[0]; })),
+		new Vlc(sarahContext)
 	]);
 }
 
-util.inherits(RssThepiratebayMoviesFreebox, Manager);
+util.inherits(RssThepiratebayMoviesVuzeVlc, Manager);
 
 
 /**
@@ -52,28 +54,22 @@ util.inherits(RssThepiratebayMoviesFreebox, Manager);
  * 
  * @param initCtx			the SARAH initialization context
  */
-RssThepiratebayMoviesFreebox.initialize = function(initCtx) {
-	var appFile = initCtx.directory+'tmp/freeboxApp.json';
-	FreeboxDownloader.initialize(initCtx, appFile);
-	FreeboxDownloader.ee.on('done', function(appInfo) {
-		if(appInfo) {
-			FreeboxAirMedia.initialize(initCtx, appFile);
-		}
-	});
+RssThepiratebayMoviesVuzeVlc.initialize = function(initCtx) {
+	VuzeDownloader.initialize(initCtx);
 }
 
 
 
-RssThepiratebayMoviesFreebox.ee = new EventEmitter();
+RssThepiratebayMoviesVuzeVlc.ee = new EventEmitter();
 
 /**
  * Execute feature availability detection
  * 
  * @param detectCtx				the SARAH context used for detection
  */
-RssThepiratebayMoviesFreebox.detect = function(detectCtx) {
-	new FreeboxDetector().detect().on('available', RssThepiratebayMoviesFreebox.ee.emit.bind(RssThepiratebayMoviesFreebox.ee, 'available'));
+RssThepiratebayMoviesVuzeVlc.detect = function(detectCtx) {
+	new AndDetector(new JavaDetector(), new VlcDetector()).detect().on('available', RssThepiratebayMoviesVuzeVlc.ee.emit.bind(RssThepiratebayMoviesVuzeVlc.ee, 'available'));
 }
 
 
-module.exports = RssThepiratebayMoviesFreebox;
+module.exports = RssThepiratebayMoviesVuzeVlc;

@@ -12,9 +12,21 @@ var RssSearch = require('../lib/search/RssSearch'),
 	JsonStore = require('../lib/store/JsonStore'),
 	BestNameMatcher = require('../lib/matcher/BestNameMatcher'),
 	fs = require('fs'),
-	util = require('util');
+	util = require('util'),
+	EventEmitter = require('events').EventEmitter,
+	FreeboxDetector = require('../lib/capabilities/FreeboxDetector');
 	
 
+/**
+ * Manager that:
+ *    - searches series on www.cpasbien.me
+ *    - filters results using a list of regular expressions
+ *    - downloads the found items using Freebox
+ *    - plays them using Freebox
+ *    
+ *    
+ * @param sarahContext				the SARAH execution context
+ */
 function RssCpasbienSeriesFreebox(sarahContext) {
 	var directory = sarahContext.directory;
 	// TODO: path should be configurable
@@ -34,6 +46,11 @@ function RssCpasbienSeriesFreebox(sarahContext) {
 
 util.inherits(RssCpasbienSeriesFreebox, Manager);
 
+/**
+ * Called when SARAH initializes. Initialize the Freebox application for being able to drive it.
+ * 
+ * @param initCtx			the SARAH initialization context
+ */
 RssCpasbienSeriesFreebox.initialize = function(initCtx) {
 	var appFile = initCtx.directory+'tmp/freeboxApp.json';
 	FreeboxDownloader.initialize(initCtx, appFile);
@@ -43,5 +60,17 @@ RssCpasbienSeriesFreebox.initialize = function(initCtx) {
 		}
 	});
 }
+
+RssCpasbienSeriesFreebox.ee = new EventEmitter();
+
+/**
+ * Execute feature availability detection
+ * 
+ * @param detectCtx				the SARAH context used for detection
+ */
+RssCpasbienSeriesFreebox.detect = function(detectCtx) {
+	new FreeboxDetector().detect().on('available', RssCpasbienSeriesFreebox.ee.emit.bind(RssCpasbienSeriesFreebox.ee, 'available'));
+}
+
 
 module.exports = RssCpasbienSeriesFreebox;

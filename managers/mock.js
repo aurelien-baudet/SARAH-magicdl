@@ -6,7 +6,8 @@ var MockSearch = require('../lib/search/MockSearch'),
 	MockPlayer = require('../lib/player/MockPlayer'),
 	Manager = require('../lib/Manager'),
 	fs = require('fs'),
-	util = require('util');
+	util = require('util'),
+	EventEmitter = require('events').EventEmitter;
 	
 
 function Mock(sarahContext) {
@@ -26,6 +27,13 @@ util.inherits(Mock, Manager);
 
 Mock.initialize = function(initCtx) {
 	
+}
+
+
+Mock.ee = new EventEmitter();
+
+Mock.detect = function(detectCtx) {
+	setTimeout(Mock.ee.emit.bind(Mock.ee, 'available', true), 0);
 }
 
 module.exports = Mock;
