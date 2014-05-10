@@ -483,7 +483,14 @@ Un manager doit respecter l'interface suivante :
 
 Un manager doit impérativement être dans le dossier managers (pour l'instant).
 
-Un manager standard peut hériter de la classe de base Manager. Voici un manager utilisant la classe de base et qui orchestre tous les exemples précédents :
+### Classes de base
+
+Il existe deux classes de bases pour les managers :
+- FullAsyncManager : qui exécute toutes les actions en parallèle sur chaque item
+- StepByStepManager : qui exécute séquentiellement les actions sur la liste complète des items
+
+
+Un manager standard peut hériter d'une des classe de base. Voici un manager utilisant la classe de base FullAsyncManager et qui orchestre tous les exemples précédents :
 ```JavaScript
 var MockSearch = require('../lib/search/MockSearch'),
 	AcceptFilter = require('../lib/filter/AcceptFilter'),

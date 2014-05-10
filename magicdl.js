@@ -1,10 +1,12 @@
 var fs = require('fs'),
-	winston = require('winston');
+	winston = require('winston'),
+	instances = {};
 
 
 winston.level = "debug";
 
 exports.init = function(SARAH) {
+	debugger;
 	var directory = './plugins/magicdl/';
 	var conf = JSON.parse(require('fs').readFileSync(directory+'download.json', 'utf8'));
 	for(var action in conf) {
@@ -26,19 +28,22 @@ exports.action = function (data, callback, config, SARAH) {
 	var directory = data.directory + '/../plugins/magicdl/';
 	var conf = JSON.parse(require('fs').readFileSync(directory+'download.json', 'utf8'));
 	var manager = conf[data.command].manager || "AutoDetectManager";
-	winston.log("debug", manager);
+	winston.log("debug", "executing "+manager+" for command "+data.command+" and method "+data.method);
 	var Manager = require('./managers/'+manager);
 	if(Manager) {
-		var instance = new Manager({
-			data: data,
-			callback: callback,
-			config: config,
-			SARAH: SARAH,
-			directory: directory,
-			downloadConf: conf,
-			managerConf: conf[data.command]
-		});
-		instance.run();
+		var instance = instances[data.command];
+		if(!instance) {
+			instance = instances[data.command] = new Manager({
+				data: data,
+				callback: callback,
+				config: config,
+				SARAH: SARAH,
+				directory: directory,
+				downloadConf: conf,
+				managerConf: conf[data.command]
+			});
+		}
+		instance[data.method || "run"]();
 	} else {
 		winston.log("error", "no manager file named "+manager+".js found in plugins/magicdl/managers folder for command "+data.command);
 	}

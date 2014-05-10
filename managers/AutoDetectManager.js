@@ -1,7 +1,8 @@
 var EventEmitter = require('events').EventEmitter,
 	util = require('util'),
 	winston = require('winston'),
-	fs = require('fs');
+	fs = require('fs'),
+	instances = {};
 
 
 /**
@@ -22,18 +23,38 @@ util.inherits(AutoDetectManager, EventEmitter);
  * Delegate the run to the previously detected manager for the current action
  */
 AutoDetectManager.prototype.run = function() {
+	this.delegate("run");
+}
+
+
+/**
+ * Delegate the execution of downloadProgress method to the previously detected manager for the current action
+ */
+AutoDetectManager.prototype.downloadProgress = function() {
+	this.delegate("downloadProgress");
+}
+
+/**
+ * Delegate the run to the previously detected manager for the current action
+ */
+AutoDetectManager.prototype.delegate = function(/*String*/method) {
 	var command = this.sarahContext.data.command;
 	// get the best manager for the command
 	var Manager = cache[command];
 	if(Manager) {
-		// create a new instance
-		var instance = new Manager(this.sarahContext);
+		var instance = instances[command];
+		if(!instance) {
+			// create a new instance
+			instance = instances[command] = new Manager(this.sarahContext);
+		}
 		// run it
-		instance.run();
+		instance[method]();
 	} else {
 		winston.log("error", "No manager available to handle the command "+command+". Either autodetect.json doesn't contain any manager for this command or no manager can be used because of your environment");
 	}
 }
+
+
 
 
 

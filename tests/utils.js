@@ -1,4 +1,28 @@
-var ExecutableFinder = require("../lib/util/ExecutableFinder");
+var ExecutableFinder = require("../lib/util/ExecutableFinder"),
+	duration = require("../lib/util/duration");
+
+
+exports.testDurationDays = function(test) {
+	test.equal(duration.format(3*duration.DAY+11*duration.HOUR+36*duration.MINUTE), "3 jours");
+	test.equal(duration.format(1*duration.DAY+11*duration.HOUR+36*duration.MINUTE), "1 jour");
+	test.done();
+}
+
+exports.testDurationHoursAndMinutes = function(test) {
+	test.equal(duration.format(11*duration.HOUR+36*duration.MINUTE), "11 heures 36 minutes");
+	test.equal(duration.format(1*duration.HOUR+36*duration.MINUTE), "1 heure 36 minutes");
+	test.equal(duration.format(1*duration.HOUR), "1 heure");
+	test.equal(duration.format(36*duration.MINUTE), "36 minutes");
+	test.equal(duration.format(12*duration.MINUTE), "12 minutes");
+	test.equal(duration.format(1*duration.MINUTE), "1 minute");
+	test.done();
+}
+
+exports.testDurationSeconds = function(test) {
+	test.equal(duration.format(21*duration.SECOND), "21 secondes");
+	test.equal(duration.format(duration.SECOND), "1 seconde");
+	test.done();
+}
 
 exports.testExecutableFinderJava = function(test) {
 	var finder = new ExecutableFinder("java", "-version", "C:/Program Files/Java");

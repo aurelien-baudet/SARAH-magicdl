@@ -6,14 +6,19 @@
     <item>SARAH</item>
     
     <one-of>
-      <item>Y a t'il de nouvelles séries<tag>out.action.command="series"</tag></item>
-      <item>nouvelles séries<tag>out.action.command="series"</tag></item>
-      <item>télécharge mes séries<tag>out.action.command="series"</tag></item>
+      <item>Y a t'il de nouvelles séries<tag>out.action.command="series";out.action.method="run"</tag></item>
+      <item>nouvelles séries<tag>out.action.command="series";out.action.method="run"</tag></item>
+      <item>télécharge mes séries<tag>out.action.command="series";out.action.method="run"</tag></item>
+      <item>Où en est le téléchargement de mes séries<tag>out.action.command="series";out.action.method="downloadProgress"</tag></item>
+      <item>statut séries<tag>out.action.command="series";out.action.method="downloadProgress"</tag></item>
+      
 
-      <item>Y a t'il de nouvelles films<tag>out.action.command="movies"</tag></item>
-      <item>nouveaux films<tag>out.action.command="movies"</tag></item>
-      <item>quels sont les nouveaux films<tag>out.action.command="movies"</tag></item>
-      <item>télécharge des films<tag>out.action.command="movies"</tag></item>
+      <item>Y a t'il de nouvelles films<tag>out.action.command="movies";out.action.method="run"</tag></item>
+      <item>nouveaux films<tag>out.action.command="movies";out.action.method="run"</tag></item>
+      <item>quels sont les nouveaux films<tag>out.action.command="movies";out.action.method="run"</tag></item>
+      <item>télécharge des films<tag>out.action.command="movies";out.action.method="run"</tag></item>
+      <item>Où en est le téléchargement de mes films<tag>out.action.command="movies";out.action.method="downloadProgress"</tag></item>
+      <item>statut films<tag>out.action.command="movies";out.action.method="downloadProgress"</tag></item>
     </one-of>
 
     <!--Liste des playlists généré depuis playlist.txt-->
