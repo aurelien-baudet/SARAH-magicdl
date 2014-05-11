@@ -12,11 +12,11 @@ exports.testBestNameMatcher = function(test) {
 		{name: "S04E01 Game of thrones FR.mkv"}
 	];
 	var bestItem = matcher.match(createItem("Arrow S02E21 VOSTFR HDTV", "arrow"), downloads);
-	test.equal(bestItem, downloads[0], "should be "+downloads[0]+" of "+bestItem);
+	test.equal(bestItem, downloads[0], "should be "+downloads[0]+" instead of "+bestItem);
 	bestItem = matcher.match(createItem("Arrow S03E21 FRENCH HDTV", "arrow"), downloads);
-	test.equal(bestItem, downloads[2], "should be "+downloads[2]+" of "+bestItem);
+	test.equal(bestItem, downloads[2], "should be "+downloads[2]+" instead of "+bestItem);
 	bestItem = matcher.match(createItem("The big bang theory VOSTFR S07E22", "the big bang theory"), downloads);
-	test.equal(bestItem, downloads[4], "should be "+downloads[4]+" of "+bestItem);
+	test.equal(bestItem, downloads[4], "should be "+downloads[4]+" instead of "+bestItem);
 	bestItem = matcher.match(createItem("Not in list", "not in list vost fr"), downloads);
 	test.equal(bestItem, null, "should not be found");
 	test.done();

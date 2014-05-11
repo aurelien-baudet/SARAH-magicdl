@@ -137,23 +137,23 @@ var strings = [
 	"The Ryan Initiative (Jack Ryan: Shadow Recruit) FRENCH DVDRIP 2014",
 	"The Ryan Initiative (Jack Ryan: Shadow Recruit) FRENCH DVDRIP AC3 2014",
 	"The Ryan Initiative (Jack Ryan: Shadow Recruit) FRENCH DVDRIP x264 2014",
-	"The Ryan Initiative (Jack Ryan: Shadow Recruit) FRENCH BluRay 1080p 2014",
-	"The Ryan Initiative (Jack Ryan: Shadow Recruit) FRENCH BluRay 720p 2014",
+	"[www.cpasbien.pe] The Ryan Initiative (Jack Ryan: Shadow Recruit) FRENCH BluRay 1080p 2014",
+	"[www.cpasbien.pe] The Ryan Initiative (Jack Ryan: Shadow Recruit) FRENCH BluRay 720p 2014",
 	"Not Safe For Work FRENCH DVDRIP 2014",
 	"L'Ordre des gardiens (The Hunters) FRENCH DVDRIP 2014",
 	"That Awkward Moment FRENCH DVDRIP 2014",
 	"That Awkward Moment FRENCH DVDRIP x264 2014",
-	"That Awkward Moment FRENCH BluRay 1080p 2014",
-	"That Awkward Moment FRENCH BluRay 720p 2014",
+	"[www.cpasbien.pe] That Awkward Moment FRENCH BluRay 1080p 2014",
+	"[www.cpasbien.pe] That Awkward Moment FRENCH BluRay 720p 2014",
 	"Awkward Moment FRENCH BluRay 720p 2014",
 	"I, Frankenstein FRENCH DVDRIP 2014",
 	"I, Frankenstein FRENCH DVDRIP AC3 2014",
-	"I, Frankenstein FRENCH DVDRIP x264 2014",
-	"I, Frankenstein FRENCH BluRay 1080p 2014",
-	"I, Frankenstein FRENCH BluRay 720p 2014",
-	"RoboCop FRENCH DVDRIP 2014",
-	"RoboCop FRENCH DVDRIP AC3 2014",
-	"RoboCop FRENCH DVDRIP x264 2014"
+	"[www.cpasbien.pe] I, Frankenstein FRENCH DVDRIP x264 2014",
+	"[www.cpasbien.pe] I, Frankenstein FRENCH BluRay 1080p 2014",
+	"[www.cpasbien.pe] I, Frankenstein FRENCH BluRay 720p 2014",
+	"[www.cpasbien.pe] RoboCop FRENCH DVDRIP 2014",
+	"[www.cpasbien.pe] RoboCop FRENCH DVDRIP AC3 2014",
+	"[www.cpasbien.pe] RoboCop FRENCH DVDRIP x264 2014"
 ];
 	
 
