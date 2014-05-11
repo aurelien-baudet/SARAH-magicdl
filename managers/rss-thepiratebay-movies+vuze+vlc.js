@@ -2,9 +2,7 @@ var RssSearch = require('../lib/search/RssSearch'),
 	AndFilter = require('../lib/filter/AndFilter'),
 	AskFilter = require('../lib/filter/AskFilter'),
 	UnreadFilter = require('../lib/filter/UnreadFilter'),
-	CompoundNameProvider = require('../lib/nameProvider/CompoundNameProvider'),
-	TrimNameProvider = require('../lib/nameProvider/TrimNameProvider'),
-	RegexpNameProvider = require('../lib/nameProvider/RegexpNameProvider'),
+	nameProviderFactory = require('../lib/nameProvider/factory'),
 	NullUrlProvider = require('../lib/urlProvider/NullUrlProvider'),
 	VuzeDownloader = require('../lib/downloader/VuzeDownloader'),
 	Vlc = require('../lib/player/Vlc'),
@@ -39,7 +37,7 @@ function RssThepiratebayMoviesVuzeVlc(sarahContext) {
 		sarahContext,
 		new RssSearch("http://rss.thepiratebay.se/201"),
 		new AndFilter(new UnreadFilter(new JsonStore(directory+'tmp/unread.json')), new AskFilter(sarahContext)),
-		new CompoundNameProvider(new RegexpNameProvider(/(VOSTFR|FRENCH|HDTV|XVID|BRRip|x264|HDRIP|AC3|TiTAN| CAM |AAC-SeedPeer|DVDRIP|WEBRIP|\.avi|\.mkv|ACAB|720p|420p|1080p|READNFO).*$/gi, ""), new TrimNameProvider()),		// short name: remove all useless information that is not understandable when earing it
+		nameProviderFactory.moviesShortName(),		// short name: remove all useless information that is not understandable when earing it
 		new NullUrlProvider(),
 		new VuzeDownloader(new BestNameMatcher(function(download) { return download.TORRENT[0].NAME[0]; })),
 		new Vlc(sarahContext)

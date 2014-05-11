@@ -1,4 +1,4 @@
 {
-	"series": ["rss-cpasbien-series+freeboxdl+freeboxairmedia", "rss-cpasbien-series+vuze+vlc"],
-	"movies": ["rss-thepiratebay-movies+freeboxdl+freeboxairmedia", "rss-thepiratebay-movies+vuze+vlc"]
+	"series": ["devmode-series", "rss-cpasbien-series+freeboxdl+freeboxairmedia", "rss-cpasbien-series+vuze+vlc"],
+	"movies": ["devmode-movies", "rss-cpasbien-movies+freeboxdl+freeboxairmedia", "rss-cpasbien-movies+vuze+vlc", "rss-thepiratebay-movies+freeboxdl+freeboxairmedia", "rss-thepiratebay-movies+vuze+vlc"]
 }

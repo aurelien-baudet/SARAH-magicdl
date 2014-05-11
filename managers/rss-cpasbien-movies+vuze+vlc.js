@@ -1,6 +1,6 @@
 var RssSearch = require('../lib/search/RssSearch'),
 	AndFilter = require('../lib/filter/AndFilter'),
-	RegexpListFilter = require('../lib/filter/RegexpListFilter'),
+	AskFilter = require('../lib/filter/AskFilter'),
 	UnreadFilter = require('../lib/filter/UnreadFilter'),
 	nameProviderFactory = require('../lib/nameProvider/factory'),
 	HtmlRegexpUrlProvider = require('../lib/urlProvider/HtmlRegexpUrlProvider'),
@@ -33,9 +33,9 @@ function RssCpasbienSeriesVlc(sarahContext) {
 	var conf = sarahContext.managerConf;
 	Manager.apply(this, [
 		sarahContext,
-		new RssSearch("http://www.cpasbien.pe/flux_rss.php?mainid=series"),
-		new AndFilter(new RegexpListFilter(conf.list), new UnreadFilter(new JsonStore(directory+'tmp/unread.json'))),
-		nameProviderFactory.seriesShortName(),
+		new RssSearch("http://www.cpasbien.pe/flux_rss.php?mainid=films"),
+		new AndFilter(new UnreadFilter(new JsonStore(directory+'tmp/unread.json')), new AskFilter(sarahContext)),
+		nameProviderFactory.moviesShortName(),		// short name: remove all useless information that is not understandable when earing it
 		new HtmlRegexpUrlProvider(/href="(.+permalien=[^"]+)"/, "http://www.cpasbien.pe"),
 		new VuzeDownloader(new BestNameMatcher(function(download) { return download.TORRENT[0].NAME[0]; })),
 		new Vlc(sarahContext)

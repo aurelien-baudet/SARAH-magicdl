@@ -1,6 +1,6 @@
 var RssSearch = require('../lib/search/RssSearch'),
 	AndFilter = require('../lib/filter/AndFilter'),
-	RegexpListFilter = require('../lib/filter/RegexpListFilter'),
+	AskFilter = require('../lib/filter/AskFilter'),
 	UnreadFilter = require('../lib/filter/UnreadFilter'),
 	nameProviderFactory = require('../lib/nameProvider/factory'),
 	HtmlRegexpUrlProvider = require('../lib/urlProvider/HtmlRegexpUrlProvider'),
@@ -25,30 +25,30 @@ var RssSearch = require('../lib/search/RssSearch'),
  *    
  * @param sarahContext				the SARAH execution context
  */
-function RssCpasbienSeriesFreebox(sarahContext) {
+function RssCpasbienMoviesFreebox(sarahContext) {
 	var directory = sarahContext.directory;
 	// TODO: path should be configurable
 	var conf = sarahContext.managerConf;
 	var freeboxConf = JSON.parse(require('fs').readFileSync(directory+'tmp/freeboxApp.json', 'utf8'));
 	Manager.apply(this, [
 		sarahContext,
-		new RssSearch("http://www.cpasbien.pe/flux_rss.php?mainid=series"),
-		new AndFilter(new RegexpListFilter(conf.list), new UnreadFilter(new JsonStore(directory+'tmp/unread.json'))),
-		nameProviderFactory.seriesShortName(),
+		new RssSearch("http://www.cpasbien.pe/flux_rss.php?mainid=films"),
+		new AndFilter(new UnreadFilter(new JsonStore(directory+'tmp/unread.json')), new AskFilter(sarahContext)),
+		nameProviderFactory.moviesShortName(),		// short name: remove all useless information that is not understandable when earing it
 		new HtmlRegexpUrlProvider(/href="(.+permalien=[^"]+)"/, "http://www.cpasbien.pe"),
 		new FreeboxDownloader(freeboxConf, new BestNameMatcher(function(download) { return download.name; }), conf.list),
 		new FreeboxAirMedia(freeboxConf)
 	]);
 }
 
-util.inherits(RssCpasbienSeriesFreebox, Manager);
+util.inherits(RssCpasbienMoviesFreebox, Manager);
 
 /**
  * Called when SARAH initializes. Initialize the Freebox application for being able to drive it.
  * 
  * @param initCtx			the SARAH initialization context
  */
-RssCpasbienSeriesFreebox.initialize = function(initCtx) {
+RssCpasbienMoviesFreebox.initialize = function(initCtx) {
 	var appFile = initCtx.directory+'tmp/freeboxApp.json';
 	FreeboxDownloader.initialize(initCtx, appFile);
 	FreeboxDownloader.ee.on('done', function(appInfo) {
@@ -58,16 +58,16 @@ RssCpasbienSeriesFreebox.initialize = function(initCtx) {
 	});
 }
 
-RssCpasbienSeriesFreebox.ee = new EventEmitter();
+RssCpasbienMoviesFreebox.ee = new EventEmitter();
 
 /**
  * Execute feature availability detection
  * 
  * @param detectCtx				the SARAH context used for detection
  */
-RssCpasbienSeriesFreebox.detect = function(detectCtx) {
-	new FreeboxDetector().detect().on('available', RssCpasbienSeriesFreebox.ee.emit.bind(RssCpasbienSeriesFreebox.ee, 'available'));
+RssCpasbienMoviesFreebox.detect = function(detectCtx) {
+	new FreeboxDetector().detect().on('available', RssCpasbienMoviesFreebox.ee.emit.bind(RssCpasbienMoviesFreebox.ee, 'available'));
 }
 
 
-module.exports = RssCpasbienSeriesFreebox;
+module.exports = RssCpasbienMoviesFreebox;

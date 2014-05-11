@@ -6,7 +6,6 @@ var fs = require('fs'),
 winston.level = "debug";
 
 exports.init = function(SARAH) {
-	debugger;
 	var directory = './plugins/magicdl/';
 	var conf = JSON.parse(require('fs').readFileSync(directory+'download.json', 'utf8'));
 	for(var action in conf) {

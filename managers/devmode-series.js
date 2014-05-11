@@ -4,28 +4,28 @@ var RssSearch = require('../lib/search/RssSearch'),
 	UnreadFilter = require('../lib/filter/UnreadFilter'),
 	nameProviderFactory = require('../lib/nameProvider/factory'),
 	HtmlRegexpUrlProvider = require('../lib/urlProvider/HtmlRegexpUrlProvider'),
-	FreeboxDownloader = require('../lib/downloader/FreeboxDownloader'),
-	FreeboxAirMedia = require('../lib/player/FreeboxAirMedia'),
+	MockDownloader = require('../lib/downloader/MockDownloader'),
+	MockPlayer = require('../lib/player/MockPlayer'),
 	Manager = require('../lib/manager/FullAsyncManager'),
-	JsonStore = require('../lib/store/JsonStore'),
+	MemoryStore = require('../lib/store/MemoryStore'),
 	BestNameMatcher = require('../lib/matcher/BestNameMatcher'),
 	fs = require('fs'),
 	util = require('util'),
 	EventEmitter = require('events').EventEmitter,
-	FreeboxDetector = require('../lib/capabilities/FreeboxDetector');
+	EnvironmentVariableDetector = require('../lib/capabilities/EnvironmentVariableDetector');
 	
 
 /**
  * Manager that:
  *    - searches series on www.cpasbien.me
  *    - filters results using a list of regular expressions
- *    - downloads the found items using Freebox
- *    - plays them using Freebox
+ *    - fake download
+ *    - fake play
  *    
  *    
  * @param sarahContext				the SARAH execution context
  */
-function RssCpasbienSeriesFreebox(sarahContext) {
+function SeriesDevMode(sarahContext) {
 	var directory = sarahContext.directory;
 	// TODO: path should be configurable
 	var conf = sarahContext.managerConf;
@@ -36,38 +36,31 @@ function RssCpasbienSeriesFreebox(sarahContext) {
 		new AndFilter(new RegexpListFilter(conf.list), new UnreadFilter(new JsonStore(directory+'tmp/unread.json'))),
 		nameProviderFactory.seriesShortName(),
 		new HtmlRegexpUrlProvider(/href="(.+permalien=[^"]+)"/, "http://www.cpasbien.pe"),
-		new FreeboxDownloader(freeboxConf, new BestNameMatcher(function(download) { return download.name; }), conf.list),
-		new FreeboxAirMedia(freeboxConf)
+		new MockDownloader(),
+		new MockPlayer()
 	]);
 }
 
-util.inherits(RssCpasbienSeriesFreebox, Manager);
+util.inherits(SeriesDevMode, Manager);
 
 /**
  * Called when SARAH initializes. Initialize the Freebox application for being able to drive it.
  * 
  * @param initCtx			the SARAH initialization context
  */
-RssCpasbienSeriesFreebox.initialize = function(initCtx) {
-	var appFile = initCtx.directory+'tmp/freeboxApp.json';
-	FreeboxDownloader.initialize(initCtx, appFile);
-	FreeboxDownloader.ee.on('done', function(appInfo) {
-		if(appInfo) {
-			FreeboxAirMedia.initialize(initCtx, appFile);
-		}
-	});
+SeriesDevMode.initialize = function(initCtx) {
 }
 
-RssCpasbienSeriesFreebox.ee = new EventEmitter();
+SeriesDevMode.ee = new EventEmitter();
 
 /**
  * Execute feature availability detection
  * 
  * @param detectCtx				the SARAH context used for detection
  */
-RssCpasbienSeriesFreebox.detect = function(detectCtx) {
-	new FreeboxDetector().detect().on('available', RssCpasbienSeriesFreebox.ee.emit.bind(RssCpasbienSeriesFreebox.ee, 'available'));
+SeriesDevMode.detect = function(detectCtx) {
+	new EnvironmentVariableDetector("MAGICDL_MODE", "dev").detect().on('available', SeriesDevMode.ee.emit.bind(SeriesDevMode.ee, 'available'));
 }
 
 
-module.exports = RssCpasbienSeriesFreebox;
+module.exports = SeriesDevMode;
