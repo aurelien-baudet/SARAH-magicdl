@@ -1,4 +1,6 @@
 var RssSearch = require('../lib/search/RssSearch'),
+	SiteSearch = require('../lib/search/SiteSearch')
+	siteParserFactory = require('../lib/search/siteParserFactory'),
 	AndFilter = require('../lib/filter/AndFilter'),
 	RegexpListFilter = require('../lib/filter/RegexpListFilter'),
 	UnreadFilter = require('../lib/filter/UnreadFilter'),
@@ -33,7 +35,8 @@ function RssCpasbienSeriesVlc(sarahContext) {
 	var conf = sarahContext.managerConf;
 	Manager.apply(this, [
 		sarahContext,
-		new RssSearch("http://www.cpasbien.pe/flux_rss.php?mainid=series"),
+//		new RssSearch("http://www.cpasbien.pe/flux_rss.php?mainid=series"),
+		new SiteSearch("http://www.cpasbien.pe/derniers-torrents.php?filtre=series", ".torrent-aff", siteParserFactory.cpasbien),
 		new AndFilter(new RegexpListFilter(conf.list), new UnreadFilter(new JsonStore(directory+'tmp/unread.json'))),
 		nameProviderFactory.seriesShortName(),
 		new HtmlRegexpUrlProvider(/href="(.+permalien=[^"]+)"/, "http://www.cpasbien.pe"),

@@ -1,4 +1,6 @@
 var RssSearch = require('../lib/search/RssSearch'),
+	SiteSearch = require('../lib/search/SiteSearch')
+	siteParserFactory = require('../lib/search/siteParserFactory'),
 	AndFilter = require('../lib/filter/AndFilter'),
 	RegexpListFilter = require('../lib/filter/RegexpListFilter'),
 	UnreadFilter = require('../lib/filter/UnreadFilter'),
@@ -26,14 +28,12 @@ var RssSearch = require('../lib/search/RssSearch'),
  * @param sarahContext				the SARAH execution context
  */
 function SeriesDevMode(sarahContext) {
-	var directory = sarahContext.directory;
-	// TODO: path should be configurable
 	var conf = sarahContext.managerConf;
-	var freeboxConf = JSON.parse(require('fs').readFileSync(directory+'tmp/freeboxApp.json', 'utf8'));
 	Manager.apply(this, [
 		sarahContext,
-		new RssSearch("http://www.cpasbien.pe/flux_rss.php?mainid=series"),
-		new AndFilter(new RegexpListFilter(conf.list), new UnreadFilter(new JsonStore(directory+'tmp/unread.json'))),
+//		new RssSearch("http://www.cpasbien.pe/flux_rss.php?mainid=series"),
+		new SiteSearch("http://www.cpasbien.pe/derniers-torrents.php?filtre=series", ".torrent-aff", siteParserFactory.cpasbien),
+		new AndFilter(new RegexpListFilter(conf.list), new UnreadFilter(new MemoryStore())),
 		nameProviderFactory.seriesShortName(),
 		new HtmlRegexpUrlProvider(/href="(.+permalien=[^"]+)"/, "http://www.cpasbien.pe"),
 		new MockDownloader(),

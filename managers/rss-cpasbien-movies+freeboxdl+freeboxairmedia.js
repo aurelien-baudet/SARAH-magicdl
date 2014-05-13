@@ -1,4 +1,6 @@
 var RssSearch = require('../lib/search/RssSearch'),
+	SiteSearch = require('../lib/search/SiteSearch')
+	siteParserFactory = require('../lib/search/siteParserFactory'),
 	AndFilter = require('../lib/filter/AndFilter'),
 	AskFilter = require('../lib/filter/AskFilter'),
 	UnreadFilter = require('../lib/filter/UnreadFilter'),
@@ -32,7 +34,8 @@ function RssCpasbienMoviesFreebox(sarahContext) {
 	var freeboxConf = JSON.parse(require('fs').readFileSync(directory+'tmp/freeboxApp.json', 'utf8'));
 	Manager.apply(this, [
 		sarahContext,
-		new RssSearch("http://www.cpasbien.pe/flux_rss.php?mainid=films"),
+//		new RssSearch("http://www.cpasbien.pe/flux_rss.php?mainid=films"),
+		new SiteSearch("http://www.cpasbien.pe/derniers-torrents.php?filtre=films", ".torrent-aff", siteParserFactory.cpasbien),
 		new AndFilter(new UnreadFilter(new JsonStore(directory+'tmp/unread.json')), new AskFilter(sarahContext)),
 		nameProviderFactory.moviesShortName(),		// short name: remove all useless information that is not understandable when earing it
 		new HtmlRegexpUrlProvider(/href="(.+permalien=[^"]+)"/, "http://www.cpasbien.pe"),
