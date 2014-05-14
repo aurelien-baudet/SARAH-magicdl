@@ -1,7 +1,7 @@
 {
 	"series": {
 		"list": [{
-			"regexp": "suits.*",
+			"regexp": "suits.*VOST.*",
 			"directory": "/Disque dur/Séries/suits"
 		}, {
 			"regexp": "arrow.*VOST.*",
