@@ -5,6 +5,10 @@ var fs = require('fs'),
 
 
 var a = [
+//{"name":"Apple"},
+//{"name":"Google"},
+{"name":"House Of Cards","phonetic":"| ˈhaʊs əv ˈkɑːrdz |"},
+{"name": "Game of thrones", "phonetic": "| ɡeɪm əv θrəʊnz |"},
 {"name":"THE OTHER WOMAN","phonetic":"| ði ˈʌðə ˈwʊmən |"},
 {"name":"Squatters","phonetic":"| ˈskwɒtəz |"},
 {"name":"Godzilla","phonetic":"| ˌɡɑːdˈzɪlə |"},
@@ -74,22 +78,36 @@ exports.init = function(SARAH) {
 			action: action
 		});
 	}
-//	var PhoneticToTTS = require("./lib/nameProvider/transformer/PhoneticToTTS"),
-//	Photransedit = require("./lib/nameProvider/transformer/Photransedit"),
-//	Item = require('./lib/Item');
-//	var transformer = new PhoneticToTTS();
-//	var idx = 0;
-//	transformer.on('done', function(item, name) {
-//		debugger;
-//		console.log(item.getName());
+	var PhoneticToTTS = require("./lib/nameProvider/transformer/PhoneticToTTS"),
+	Photransedit = require("./lib/nameProvider/transformer/Photransedit"),
+	Item = require('./lib/Item');
+	var phonetic = new Photransedit();
+	var transformer = new PhoneticToTTS();
+	var idx = 0;
+	var phonetics = {};
+	phonetic.on('done', function(item, name) {
+		console.log(item.getName()+"  ->  "+name);
+		phonetics[idx] = name;
+		transformer.transform(item, name);
+	});
+	transformer.on('done', function(item, name) {
+		debugger;
+		console.log(item.getName()+"  ->  "+phonetics[idx]+"  ->  "+name);
+		SARAH.speak(name, function() {
+			setTimeout(function() {
+				phonetic.transform(new Item(a[++idx].name), a[idx].name);
+			}, 2000);
+		});
+	});
+	phonetic.transform(new Item(a[idx].name), a[idx].phonetic);
+//	var speak = function(name) {
 //		SARAH.speak(name, function() {
 //			setTimeout(function() {
-//				transformer.transform(new Item(a[++idx].name), a[idx].phonetic);
-//			}, 5000);
+//				speak(a[idx++].name);
+//			}, 2000);
 //		});
-//	});
-//	transformer.transform(new Item(a[idx].name), a[idx].phonetic);
-	
+//	}
+//	speak(a[idx].name);
 }
 
 	
