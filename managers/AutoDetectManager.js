@@ -95,7 +95,7 @@ AutoDetectManager.initialize = function(initCtx) {
 
 
 
-AutoDetectManager.next = function(/*String*/command, /*Array*/managers, /*Integer*/managerIdx, /*Object*/detectCtx) {
+AutoDetectManager.next = function(/*String*/command, /*String[]*/managers, /*Integer*/managerIdx, /*Object*/detectCtx) {
 	var Manager = require('./'+managers[managerIdx]);
 	Manager.detect(detectCtx);
 	Manager.ee.once('available', function(command, managers, managerIdx, detectCtx, Manager, available) {

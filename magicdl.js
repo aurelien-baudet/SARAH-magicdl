@@ -3,7 +3,7 @@ var fs = require('fs'),
 	instances = {};
 
 
-winston.level = "debug";
+//winston.level = "debug";
 
 exports.init = function(SARAH) {
 	var directory = './plugins/magicdl/';
