@@ -11,6 +11,9 @@
       <item>télécharge mes séries<tag>out.action.command="series";out.action.method="run"</tag></item>
       <item>Où en est le téléchargement de mes séries<tag>out.action.command="series";out.action.method="downloadProgress"</tag></item>
       <item>statut séries<tag>out.action.command="series";out.action.method="downloadProgress"</tag></item>
+
+      
+      <item>lance les recherches<tag>out.action.command="search";out.action.method="run"</tag></item>
       
 
       <item>Y a t'il de nouvelles films<tag>out.action.command="movies";out.action.method="run"</tag></item>

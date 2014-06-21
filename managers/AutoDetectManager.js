@@ -81,11 +81,12 @@ AutoDetectManager.initialize = function(initCtx) {
 	// register event and store found managers in cache
 	if(!registered) {
 		registered = true;
-		AutoDetectManager.ee.on('managerAvailable', function(command, name, Manager) {
+		AutoDetectManager.ee.on('managerAvailable', function(command, managers, managerIdx, name, Manager) {
 			if(!cache[command]) {
 				winston.log("info", "Using manager "+name+" for command "+command);
 				cache[command] = Manager;
 				Manager.initialize(initCtx);
+				Manager.ee.once('done', AutoDetectManager.ee.emit.bind(AutoDetectManager.ee, 'done'));
 			}
 		});
 	}
@@ -101,7 +102,7 @@ AutoDetectManager.next = function(/*String*/command, /*String[]*/managers, /*Int
 	Manager.ee.once('available', function(command, managers, managerIdx, detectCtx, Manager, available) {
 		if(available) {
 			// if available => stop immediately and trigger managerAvailable event
-			AutoDetectManager.ee.emit('managerAvailable', command, managers[managerIdx], Manager);
+			AutoDetectManager.ee.emit('managerAvailable', command, managers, managerIdx, managers[managerIdx], Manager);
 		} else {
 			// not available => try next one
 			if(++managerIdx<managers.length) {

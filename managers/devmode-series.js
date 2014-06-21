@@ -49,6 +49,7 @@ util.inherits(SeriesDevMode, Manager);
  * @param initCtx			the SARAH initialization context
  */
 SeriesDevMode.initialize = function(initCtx) {
+	setTimeout(SeriesDevMode.ee.emit.bind(SeriesDevMode.ee, 'done'), 0);
 }
 
 SeriesDevMode.ee = new EventEmitter();

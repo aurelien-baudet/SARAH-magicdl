@@ -54,9 +54,10 @@ util.inherits(RssCpasbienMoviesFreebox, Manager);
 RssCpasbienMoviesFreebox.initialize = function(initCtx) {
 	var appFile = initCtx.directory+'tmp/freeboxApp.json';
 	FreeboxDownloader.initialize(initCtx, appFile);
-	FreeboxDownloader.ee.on('done', function(appInfo) {
+	FreeboxDownloader.ee.once('done', function(appInfo) {
 		if(appInfo) {
 			FreeboxAirMedia.initialize(initCtx, appFile);
+			FreeboxAirMedia.ee.once('done', RssCpasbienMoviesFreebox.ee.emit.bind(RssCpasbienMoviesFreebox.ee, 'done'));
 		}
 	});
 }

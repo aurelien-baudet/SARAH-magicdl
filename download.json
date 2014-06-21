@@ -21,8 +21,19 @@
 		}, {
 			"regexp": "mentalist.*VOST.*",
 			"directory": "/Disque dur/Séries/Mentalist"
+		}, {
+			"regexp": "engrenages.*",
+			"directory": "/Disque dur/Séries/Engrenages"
+		}, {
+			"regexp": "gang related.*VOST.*",
+			"directory": "/Disque dur/Séries/Gang Related"
+		}, {
+			"regexp": "house of cards.*VOST.*",
+			"directory": "/Disque dur/Séries/House of Cards"
 		}]
 	},
 	"movies": {
+	},
+	"search": {
 	}
 }

@@ -54,6 +54,7 @@ util.inherits(RssThepiratebayMoviesVuzeVlc, Manager);
  */
 RssThepiratebayMoviesVuzeVlc.initialize = function(initCtx) {
 	VuzeDownloader.initialize(initCtx);
+	VuzeDownloader.ee.once('done', RssCpasbienSeriesFreebox.ee.emit.bind(RssCpasbienSeriesFreebox.ee, 'done'));
 }
 
 

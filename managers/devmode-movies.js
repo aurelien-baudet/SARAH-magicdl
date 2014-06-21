@@ -48,6 +48,7 @@ util.inherits(MoviesDevMode, Manager);
  * @param initCtx			the SARAH initialization context
  */
 MoviesDevMode.initialize = function(initCtx) {
+	setTimeout(MoviesDevMode.ee.emit.bind(MoviesDevMode.ee, 'done'), 0);
 }
 
 MoviesDevMode.ee = new EventEmitter();

@@ -53,9 +53,10 @@ util.inherits(RssThepiratebayMoviesFreebox, Manager);
 RssThepiratebayMoviesFreebox.initialize = function(initCtx) {
 	var appFile = initCtx.directory+'tmp/freeboxApp.json';
 	FreeboxDownloader.initialize(initCtx, appFile);
-	FreeboxDownloader.ee.on('done', function(appInfo) {
+	FreeboxDownloader.ee.once('done', function(appInfo) {
 		if(appInfo) {
 			FreeboxAirMedia.initialize(initCtx, appFile);
+			FreeboxAirMedia.ee.once('done', RssThepiratebayMoviesFreebox.ee.emit.bind(RssThepiratebayMoviesFreebox.ee, 'done'));
 		}
 	});
 }

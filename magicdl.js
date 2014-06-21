@@ -3,22 +3,18 @@ var fs = require('fs'),
 	instances = {};
 
 
-//winston.level = "debug";
+if(process.env.MAGICDL_MODE=="dev") {
+	winston.level = "debug";
+}
 
 exports.init = function(SARAH) {
 	var directory = './plugins/magicdl/';
 	var conf = JSON.parse(require('fs').readFileSync(directory+'download.json', 'utf8'));
+	var actions = [];
 	for(var action in conf) {
-		var manager = conf[action].manager || "AutoDetectManager";
-		var Manager = require('./managers/'+manager);
-		Manager.initialize({
-			SARAH: SARAH,
-			directory: directory,
-			downloadConf: conf,
-			managerConf: conf[action],
-			action: action
-		});
+		actions.push(action);
 	}
+	next(SARAH, directory, conf, actions, 0);
 }
 
 	
@@ -46,4 +42,27 @@ exports.action = function (data, callback, config, SARAH) {
 	} else {
 		winston.log("error", "no manager file named "+manager+".js found in plugins/magicdl/managers folder for command "+data.command);
 	}
+}
+
+
+
+next = function(SARAH, /*String*/directory, /*Map*/conf, /*String[]*/actions, /*Integer*/idx) {
+	if(idx<actions.length) {
+		initialize(SARAH, directory, conf, actions, idx, actions[idx]);
+	} else {
+		// nothing to do
+	}
+}
+
+initialize = function(SARAH, /*String*/directory, /*Map*/conf, /*String[]*/actions, /*Integer*/idx, /*String*/action) {
+	var manager = conf[action].manager || "AutoDetectManager";
+	var Manager = require('./managers/'+manager);
+	Manager.initialize({
+		SARAH: SARAH,
+		directory: directory,
+		downloadConf: conf,
+		managerConf: conf[action],
+		action: action
+	});
+	Manager.ee.once('done', next.bind(Manager.ee, SARAH, directory, conf, actions, idx+1));
 }

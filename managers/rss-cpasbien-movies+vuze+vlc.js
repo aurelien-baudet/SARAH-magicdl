@@ -54,6 +54,7 @@ util.inherits(RssCpasbienSeriesVlc, Manager);
  */
 RssCpasbienSeriesVlc.initialize = function(initCtx) {
 	VuzeDownloader.initialize(initCtx);
+	VuzeDownloader.ee.once('done', RssCpasbienSeriesVlc.ee.emit.bind(RssCpasbienSeriesVlc.ee, 'done'));
 }
 
 
