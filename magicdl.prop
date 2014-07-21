@@ -9,7 +9,7 @@
     "magicdl" :   { 
       "name"       		: "magicdl",
       "description"		: "",
-      "time"       		: "* * * * *",
+      "time"       		: "*/30 * * * *",
 	  "silent"	: true
     }
   }
