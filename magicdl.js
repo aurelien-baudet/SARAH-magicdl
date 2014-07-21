@@ -1,5 +1,7 @@
 var fs = require('fs'),
 	winston = require('winston'),
+	object = require("./lib/util/object"),
+	reset = require("./lib/reset/reset"),
 	instances = {};
 
 
@@ -7,22 +9,37 @@ if(process.env.MAGICDL_MODE=="dev") {
 	winston.level = "debug";
 }
 
+reset.run();
+
 exports.init = function(SARAH) {
 	var directory = './plugins/magicdl/';
 	var conf = JSON.parse(require('fs').readFileSync(directory+'download.json', 'utf8'));
-	var actions = [];
-	for(var action in conf) {
-		actions.push(action);
+	var autodetect = JSON.parse(require('fs').readFileSync(directory+'autodetect.json', 'utf8'));
+	var commands = [];
+	for(var context in autodetect) {
+		for(var action in autodetect[context]) {
+			commands.push(context+"."+action);
+		}
 	}
-	next(SARAH, directory, conf, actions, 0);
+	next(SARAH, directory, conf, commands, 0);
 }
 
 	
 exports.action = function (data, callback, config, SARAH) {
-    config = config.modules.magicdl;
+	start(data, callback, config.modules.magicdl, SARAH);
+}
+
+
+exports.cron = function(callback, task, SARAH) {
+	start({directory: __dirname+"/../../script", command: "cron.series", method: "run"}, callback, task, SARAH);
+}
+
+
+start = function(data, callback, config, SARAH) {
 	var directory = data.directory + '/../plugins/magicdl/';
 	var conf = JSON.parse(require('fs').readFileSync(directory+'download.json', 'utf8'));
-	var manager = conf[data.command].manager || "AutoDetectManager";
+	var commandConf = object.get(conf, data.command);
+	var manager = (commandConf && commandConf.manager) || "AutoDetectManager";
 	winston.log("debug", "executing "+manager+" for command "+data.command+" and method "+data.method);
 	var Manager = require('./managers/'+manager);
 	if(Manager) {
@@ -35,7 +52,8 @@ exports.action = function (data, callback, config, SARAH) {
 				SARAH: SARAH,
 				directory: directory,
 				downloadConf: conf,
-				managerConf: conf[data.command]
+				managerConf: getCommandConf(conf, data.command),
+				plugin: exports
 			});
 		}
 		instance[data.method || "run"]();
@@ -45,6 +63,14 @@ exports.action = function (data, callback, config, SARAH) {
 }
 
 
+getCommandName = function(/*String*/command) {
+	var parts = command.split(".");
+	return parts[parts.length-1];
+}
+
+getCommandConf = function(/*Object*/downloadConf, /*String*/command) {
+	return downloadConf[getCommandName(command)];
+}
 
 next = function(SARAH, /*String*/directory, /*Map*/conf, /*String[]*/actions, /*Integer*/idx) {
 	if(idx<actions.length) {
@@ -55,14 +81,16 @@ next = function(SARAH, /*String*/directory, /*Map*/conf, /*String[]*/actions, /*
 }
 
 initialize = function(SARAH, /*String*/directory, /*Map*/conf, /*String[]*/actions, /*Integer*/idx, /*String*/action) {
-	var manager = conf[action].manager || "AutoDetectManager";
+	var commandConf = object.get(conf, action);
+	var manager = (commandConf && commandConf.manager) || "AutoDetectManager";
 	var Manager = require('./managers/'+manager);
 	Manager.initialize({
 		SARAH: SARAH,
 		directory: directory,
 		downloadConf: conf,
-		managerConf: conf[action],
-		action: action
+		managerConf: getCommandConf(conf, action),
+		action: action,
+		plugin: exports
 	});
 	Manager.ee.once('done', next.bind(Manager.ee, SARAH, directory, conf, actions, idx+1));
 }

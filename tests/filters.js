@@ -21,53 +21,53 @@ var itemsList = [[
 	new Item("Witches of East End S01E01 FRENCH HDTV")
 ]];
 
-exports.testRegexpFilter = function(test) {
-	var filters = [
-		{filter: new RegexpFilter("arrow.*"), expected: [3, 1]},
-		{filter: new RegexpFilter("game"), expected: [1, 0]}
-	];
-	suite(filters, test);
-}
-
-
-exports.testRegexpListFilter = function(test) {
-	var filters = [
-		{filter: new RegexpListFilter({regexp: "arrow.*VOSTFR"}, {regexp: "the.big.bang.theory.*VOSTFR"}), expected: [2, 1]},
-		{filter: new RegexpListFilter({regexp: "arrow.*"}, {regexp: "the.big.bang.theory.*"}), expected: [5, 2]},
-		{filter: new RegexpListFilter({regexp: "VOSTFR"}, {regexp: "FRENCH"}), expected: [5, 6]}
-	];
-	suite(filters, test);
-}
-
-exports.testAndRegexpFilter = function(test) {
-	var filters = [
-		{filter: new AndFilter(new RegexpFilter("arrow.*"), new RegexpFilter(".*VOSTFR.*")), expected: [1, 0]},
-		{filter: new AndFilter(new RegexpFilter("arrow.*"), new RegexpFilter(".*FRENCH.*")), expected: [2, 1]},
-		{filter: new AndFilter(new RegexpFilter("bang.*"), new RegexpFilter(".*HDTV.*")), expected: [2, 1]}
-	];
-	suite(filters, test);
-}
-
-exports.testOrRegexpFilter = function(test) {
-	var filters = [
-		{filter: new OrFilter(new RegexpFilter("arrow.*"), new RegexpFilter(".*VOSTFR.*")), expected: [4, 5]},
-		{filter: new OrFilter(new RegexpFilter("arrow.*"), new RegexpFilter(".*FRENCH.*")), expected: [4, 2]},
-		{filter: new OrFilter(new RegexpFilter("bang.*"), new RegexpFilter(".*HDTV.*")), expected: [5, 6]}
-	];
-	suite(filters, test);
-}
-
-exports.testAskFilter = function(test) {
-	// fake SARAH to simulate askme
-	var sarahContext = {
-		SARAH: {
-			askme: function(text, grammar, timeout, next) {
-				setTimeout(next.bind(this, "o", function() {}), 0);
-			}
-		}
-	};
-	testFilter(new AskFilter(sarahContext), movies, 51, test, test.done.bind(test));
-}
+//exports.testRegexpFilter = function(test) {
+//	var filters = [
+//		{filter: new RegexpFilter("arrow.*"), expected: [3, 1]},
+//		{filter: new RegexpFilter("game"), expected: [1, 0]}
+//	];
+//	suite(filters, test);
+//}
+//
+//
+//exports.testRegexpListFilter = function(test) {
+//	var filters = [
+//		{filter: new RegexpListFilter({regexp: "arrow.*VOSTFR"}, {regexp: "the.big.bang.theory.*VOSTFR"}), expected: [2, 1]},
+//		{filter: new RegexpListFilter({regexp: "arrow.*"}, {regexp: "the.big.bang.theory.*"}), expected: [5, 2]},
+//		{filter: new RegexpListFilter({regexp: "VOSTFR"}, {regexp: "FRENCH"}), expected: [5, 6]}
+//	];
+//	suite(filters, test);
+//}
+//
+//exports.testAndRegexpFilter = function(test) {
+//	var filters = [
+//		{filter: new AndFilter(new RegexpFilter("arrow.*"), new RegexpFilter(".*VOSTFR.*")), expected: [1, 0]},
+//		{filter: new AndFilter(new RegexpFilter("arrow.*"), new RegexpFilter(".*FRENCH.*")), expected: [2, 1]},
+//		{filter: new AndFilter(new RegexpFilter("bang.*"), new RegexpFilter(".*HDTV.*")), expected: [2, 1]}
+//	];
+//	suite(filters, test);
+//}
+//
+//exports.testOrRegexpFilter = function(test) {
+//	var filters = [
+//		{filter: new OrFilter(new RegexpFilter("arrow.*"), new RegexpFilter(".*VOSTFR.*")), expected: [4, 5]},
+//		{filter: new OrFilter(new RegexpFilter("arrow.*"), new RegexpFilter(".*FRENCH.*")), expected: [4, 2]},
+//		{filter: new OrFilter(new RegexpFilter("bang.*"), new RegexpFilter(".*HDTV.*")), expected: [5, 6]}
+//	];
+//	suite(filters, test);
+//}
+//
+//exports.testAskFilter = function(test) {
+//	// fake SARAH to simulate askme
+//	var sarahContext = {
+//		SARAH: {
+//			askme: function(text, grammar, timeout, next) {
+//				setTimeout(next.bind(this, "o", function() {}), 0);
+//			}
+//		}
+//	};
+//	testFilter(new AskFilter(sarahContext), movies, 51, test, test.done.bind(test));
+//}
 
 
 

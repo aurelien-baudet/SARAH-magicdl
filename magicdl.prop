@@ -4,5 +4,13 @@
       "description": "Permet de rechercher, télécharger et lire des séries ou des films",
       "version" : "0.0.1"
     }
+  },
+  "cron" : {
+    "magicdl" :   { 
+      "name"       		: "magicdl",
+      "description"		: "",
+      "time"       		: "* * * * *",
+	  "silent"	: true
+    }
   }
 }

@@ -2,6 +2,7 @@ var EventEmitter = require('events').EventEmitter,
 	util = require('util'),
 	winston = require('winston'),
 	fs = require('fs'),
+	object = require("../lib/util/object"),
 	instances = {};
 
 
@@ -91,7 +92,7 @@ AutoDetectManager.initialize = function(initCtx) {
 		});
 	}
 	// start detection
-	AutoDetectManager.next(command, detectionConf[command], 0, initCtx);
+	AutoDetectManager.next(command, object.get(detectionConf, command), 0, initCtx);
 }
 
 

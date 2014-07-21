@@ -1,6 +1,7 @@
 var ExecutableFinder = require("../lib/util/ExecutableFinder"),
 	duration = require("../lib/util/duration"),
-	similarity = require("../lib/util/similarity");
+	similarity = require("../lib/util/similarity"),
+	object = require("../lib/util/object");
 
 
 
@@ -64,6 +65,14 @@ exports.testExecutableFinderVLC = function(test) {
 		test.ok(executable, "C:/Program Files (x86)/VideoLAN/VLC/vlc.exe", "executable souhd be C:/Program Files (x86)/VideoLAN/VLC/vlc.exe");
 		test.done();
 	})
+}
+
+
+exports.testObjectGet = function(test) {
+	test.equal(object.get({"a": {"b": {"c": [{"d": "should be enough"}]}}}, "a.b.c.0.d"), "should be enough", "get recursive property");
+	var obj = {"a": {"b": {"c": [{"d": {"e": "end"}}]}}};
+	test.equal(object.get(obj, "a.b.c.0.d"), obj.a.b.c[0].d, "get recursive property");
+	test.done();
 }
 
 
