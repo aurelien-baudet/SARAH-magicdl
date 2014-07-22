@@ -2,7 +2,8 @@ var fs = require('fs'),
 	winston = require('winston'),
 	object = require("./lib/util/object"),
 	reset = require("./lib/reset/reset"),
-	instances = {};
+	instances = {},
+	standbyRegistry = [];
 
 
 if(process.env.MAGICDL_MODE=="dev") {
@@ -34,6 +35,15 @@ exports.cron = function(callback, task, SARAH) {
 	start({directory: __dirname+"/../../script", command: "cron.series", method: "run"}, callback, task, SARAH);
 }
 
+exports.standBy = function(motion, data, SARAH) {
+	for(var i=0, l=standbyRegistry.length ; i<l ; i++) {
+		standbyRegistry[i].standBy(motion, data, SARAH);
+	}
+}
+
+exports.registerStandBy = function(func) {
+	standbyRegistry.push(func);
+}
 
 start = function(data, callback, config, SARAH) {
 	var directory = data.directory + '/../plugins/magicdl/';
