@@ -5,7 +5,7 @@ var RssSearch = require('../lib/search/RssSearch'),
 	AskFilter = require('../lib/filter/AskFilter'),
 	UnreadFilter = require('../lib/filter/UnreadFilter'),
 	nameProviderFactory = require('../lib/nameProvider/factory'),
-	HtmlRegexpUrlProvider = require('../lib/urlProvider/HtmlRegexpUrlProvider'),
+	urlProviderFactory = require('../lib/urlProvider/urlProviderFactory'),
 	FreeboxDownloader = require('../lib/downloader/FreeboxDownloader'),
 	FreeboxAirMedia = require('../lib/player/FreeboxAirMedia'),
 	Manager = require('../lib/manager/StepByStepManager'),
@@ -38,7 +38,7 @@ function RssCpasbienMoviesFreebox(sarahContext) {
 		new SiteSearch("http://www.cpasbien.pe/derniers-torrents.php?filtre=films", ".torrent-aff", siteParserFactory.cpasbien),
 		new AndFilter(new UnreadFilter(new JsonStore(directory+'tmp/unread.json')), new AskFilter(sarahContext)),
 		nameProviderFactory.moviesShortName(),		// short name: remove all useless information that is not understandable when earing it
-		new HtmlRegexpUrlProvider(/href="(.+permalien=[^"]+)"/, "http://www.cpasbien.pe"),
+		urlProviderFactory.cpasbien(),
 		new FreeboxDownloader(freeboxConf, new BestNameMatcher(function(download) { return download.name; }), conf.list),
 		new FreeboxAirMedia(freeboxConf)
 	]);

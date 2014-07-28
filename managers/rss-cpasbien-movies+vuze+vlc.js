@@ -5,7 +5,7 @@ var RssSearch = require('../lib/search/RssSearch'),
 	AskFilter = require('../lib/filter/AskFilter'),
 	UnreadFilter = require('../lib/filter/UnreadFilter'),
 	nameProviderFactory = require('../lib/nameProvider/factory'),
-	HtmlRegexpUrlProvider = require('../lib/urlProvider/HtmlRegexpUrlProvider'),
+	urlProviderFactory = require('../lib/urlProvider/urlProviderFactory'),
 	VuzeDownloader = require('../lib/downloader/VuzeDownloader'),
 	Vlc = require('../lib/player/Vlc'),
 	Manager = require('../lib/manager/StepByStepManager'),
@@ -38,7 +38,7 @@ function RssCpasbienSeriesVlc(sarahContext) {
 		new SiteSearch("http://www.cpasbien.pe/derniers-torrents.php?filtre=films", ".torrent-aff", siteParserFactory.cpasbien),
 		new AndFilter(new UnreadFilter(new JsonStore(directory+'tmp/unread.json')), new AskFilter(sarahContext)),
 		nameProviderFactory.moviesShortName(),		// short name: remove all useless information that is not understandable when earing it
-		new HtmlRegexpUrlProvider(/href="(.+permalien=[^"]+)"/, "http://www.cpasbien.pe"),
+		urlProviderFactory.cpasbien(),
 		new VuzeDownloader(new BestNameMatcher(function(download) { return download.TORRENT[0].NAME[0]; })),
 		new Vlc(sarahContext)
 	]);
