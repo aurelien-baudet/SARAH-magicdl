@@ -37,7 +37,7 @@ exports.cron = function(callback, task, SARAH) {
 
 exports.standBy = function(motion, data, SARAH) {
 	for(var i=0, l=standbyRegistry.length ; i<l ; i++) {
-		standbyRegistry[i].standBy(motion, data, SARAH);
+		standbyRegistry[i](motion, data, SARAH);
 	}
 }
 

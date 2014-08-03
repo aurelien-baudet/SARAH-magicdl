@@ -5,7 +5,6 @@ var RssSearch = require('../lib/search/RssSearch'),
 	RegexpListFilter = require('../lib/filter/RegexpListFilter'),
 	UnreadFilter = require('../lib/filter/UnreadFilter'),
 	nameProviderFactory = require('../lib/nameProvider/factory'),
-	HtmlRegexpUrlProvider = require('../lib/urlProvider/HtmlRegexpUrlProvider'),
 	FreeboxDownloader = require('../lib/downloader/FreeboxDownloader'),
 	FreeboxAirMedia = require('../lib/player/FreeboxAirMedia'),
 	WaitPresencePlayerDecorator = require('../lib/player/WaitPresencePlayerDecorator'),
@@ -17,7 +16,8 @@ var RssSearch = require('../lib/search/RssSearch'),
 	fs = require('fs'),
 	util = require('util'),
 	EventEmitter = require('events').EventEmitter,
-	FreeboxDetector = require('../lib/capabilities/FreeboxDetector');
+	FreeboxDetector = require('../lib/capabilities/FreeboxDetector'),
+	urlProviderFactory = require('../lib/urlProvider/urlProviderFactory');
 	
 
 /**
@@ -41,7 +41,7 @@ function RssCpasbienSeriesFreebox(sarahContext) {
 		new SiteSearch("http://www.cpasbien.pe/derniers-torrents.php?filtre=series-vostfr", ".torrent-aff", siteParserFactory.cpasbien),
 		new AndFilter(new RegexpListFilter(conf.list), new UnreadFilter(new JsonStore(directory+'tmp/unread.json'))),
 		nameProviderFactory.seriesShortName(),
-		new HtmlRegexpUrlProvider(/href="(.+permalien=[^"]+)"/, "http://www.cpasbien.pe"),
+		urlProviderFactory.cpasbien(),
 		new FreeboxDownloader(freeboxConf, new BestNameMatcher(function(download) { return download.name; }), conf.list),
 		new WaitPresencePlayerDecorator(sarahContext, new FreeboxAirMedia(freeboxConf), new KinectDetector(sarahContext), new JsonStore(directory+'tmp/waiting.json'))
 //		new WaitPresencePlayerDecorator(sarahContext, new FreeboxAirMedia(freeboxConf), new RandomDetector(5000, 10000), new JsonStore(directory+'tmp/waiting.json'))
