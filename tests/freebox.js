@@ -48,3 +48,13 @@ var freebox = require("../lib/freebox"),
 //		});
 //	});
 //}
+
+//exports.testFsLs4 = function(test) {
+//	freebox.connect(app);
+//	freebox.on('ready', function() {
+//		freebox.fs.ls(freebox.encodePath("/Disque dur/Séries/Gang Related//Gang.Related.S01E11.FASTSUB.VOSTFR.HDTV.XviD-ADDiCTiON.avi"), function(files) {
+//				test.done();
+//		});
+//	});
+//}
+//
