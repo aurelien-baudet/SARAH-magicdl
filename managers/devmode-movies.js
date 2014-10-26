@@ -14,7 +14,10 @@ var RssSearch = require('../lib/search/RssSearch'),
 	fs = require('fs'),
 	util = require('util'),
 	EventEmitter = require('events').EventEmitter,
-	EnvironmentVariableDetector = require('../lib/capabilities/EnvironmentVariableDetector');
+	EnvironmentVariableDetector = require('../lib/capabilities/EnvironmentVariableDetector'),
+	NullNotifier = require('../lib/notify/NullNotifier'),
+	SpeakNotifier = require('../lib/notify/SpeakNotifier'),
+	PushingBoxNotifier = require('../lib/notify/PushingBoxNotifier');
 	
 
 /**
@@ -36,7 +39,12 @@ function MoviesDevMode(sarahContext) {
 		nameProviderFactory.moviesShortName(),		// short name: remove all useless information that is not understandable when earing it
 		new HtmlRegexpUrlProvider(/href="(.+permalien=[^"]+)"/, "http://www.cpasbien.pe"),
 		new MockDownloader(),
-		new MockPlayer()
+		new MockPlayer(),
+		{
+			nothing: new SpeakNotifier(sarahContext, 'Rien à télécharger'),
+			downloadStarted: new SpeakNotifier(sarahContext, '${getSpeakName()} en cours de téléchargement'),
+			downloaded: new SpeakNotifier(sarahContext, '${getSpeakName()} est téléchargé')
+		}
 	]);
 }
 

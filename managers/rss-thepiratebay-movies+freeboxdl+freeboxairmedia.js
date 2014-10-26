@@ -12,7 +12,11 @@ var RssSearch = require('../lib/search/RssSearch'),
 	fs = require('fs'),
 	util = require('util'),
 	EventEmitter = require('events').EventEmitter,
-	FreeboxDetector = require('../lib/capabilities/FreeboxDetector');
+	FreeboxDetector = require('../lib/capabilities/FreeboxDetector'),
+	NullNotifier = require('../lib/notify/NullNotifier'),
+	SpeakNotifier = require('../lib/notify/SpeakNotifier'),
+	PushingBoxNotifier = require('../lib/notify/PushingBoxNotifier'),
+	AskmePlayerDecorator = require('../lib/player/AskmePlayerDecorator');
 	
 
 
@@ -38,7 +42,12 @@ function RssThepiratebayMoviesFreebox(sarahContext) {
 		nameProviderFactory.moviesShortName(),		// short name: remove all useless information that is not understandable when earing it
 		new NullUrlProvider(),
 		new FreeboxDownloader(freeboxConf, new BestNameMatcher(function(download) { return download.name; }), conf.list),
-		new FreeboxAirMedia(freeboxConf)
+		new AskmePlayerDecorator(sarahContext, new FreeboxAirMedia(freeboxConf), '${getSpeakName()} est téléchargé. Veux-tu le regarder maintenant ?'),
+		{
+			nothing: sarahContext.config.silent ? new NullNotifier() : new SpeakNotifier(sarahContext, 'Rien à télécharger'),
+			downloadStarted: sarahContext.config.silent ? new NullNotifier() : new SpeakNotifier(sarahContext, '${getSpeakName()} en cours de téléchargement'),
+			downloaded: new NullNotifier()
+		}
 	]);
 }
 

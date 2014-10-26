@@ -2,7 +2,10 @@
   "modules" : { 
     "magicdl"  : {
       "description": "Permet de rechercher, télécharger et lire des séries ou des films",
-      "version" : "0.0.1"
+      "version" : "0.0.1",
+	  "pushingbox": {
+	  	"deviceid": ""
+	  }
     }
   },
   "cron" : {
@@ -10,7 +13,10 @@
       "name"       		: "magicdl",
       "description"		: "",
       "time"       		: "*/30 * * * *",
-	  "silent"	: true
+	  "silent"	: true,
+	  "pushingbox": {
+	  	"deviceid": ""
+	  }
     }
   }
 }

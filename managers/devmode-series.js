@@ -14,7 +14,11 @@ var RssSearch = require('../lib/search/RssSearch'),
 	fs = require('fs'),
 	util = require('util'),
 	EventEmitter = require('events').EventEmitter,
-	EnvironmentVariableDetector = require('../lib/capabilities/EnvironmentVariableDetector');
+	EnvironmentVariableDetector = require('../lib/capabilities/EnvironmentVariableDetector'),
+	NullNotifier = require('../lib/notify/NullNotifier'),
+	SpeakNotifier = require('../lib/notify/SpeakNotifier'),
+	PushingBoxNotifier = require('../lib/notify/PushingBoxNotifier'),
+	AskmePlayerDecorator = require('../lib/player/AskmePlayerDecorator');
 	
 
 /**
@@ -37,7 +41,12 @@ function SeriesDevMode(sarahContext) {
 		nameProviderFactory.seriesShortName(),
 		new HtmlRegexpUrlProvider(/href="(.+permalien=[^"]+)"/, "http://www.cpasbien.pe"),
 		new MockDownloader(),
-		new MockPlayer()
+		new AskmePlayerDecorator(sarahContext, new MockPlayer(), '${getSpeakName()} est téléchargé. Veux-tu le regarder maintenant ?'),
+		{
+			nothing: new SpeakNotifier(sarahContext, 'Rien à télécharger'),
+			downloadStarted: new SpeakNotifier(sarahContext, '${getSpeakName()} en cours de téléchargement'),
+			downloaded: new PushingBoxNotifier(sarahContext.config.pushingbox.deviceid, 'S.A.R.A.H. : ${getSpeakName()} est téléchargé', '${getName()} est téléchargé')
+		}
 	]);
 }
 

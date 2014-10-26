@@ -17,7 +17,10 @@ var RssSearch = require('../lib/search/RssSearch'),
 	util = require('util'),
 	EventEmitter = require('events').EventEmitter,
 	FreeboxDetector = require('../lib/capabilities/FreeboxDetector'),
-	urlProviderFactory = require('../lib/urlProvider/urlProviderFactory');
+	urlProviderFactory = require('../lib/urlProvider/urlProviderFactory'),
+	NullNotifier = require('../lib/notify/NullNotifier'),
+	SpeakNotifier = require('../lib/notify/SpeakNotifier'),
+	PushingBoxNotifier = require('../lib/notify/PushingBoxNotifier');
 	
 
 /**
@@ -43,8 +46,13 @@ function RssCpasbienSeriesFreebox(sarahContext) {
 		nameProviderFactory.seriesShortName(),
 		urlProviderFactory.cpasbien(),
 		new FreeboxDownloader(freeboxConf, new BestNameMatcher(function(download) { return download.name; }), conf.list),
-		new WaitPresencePlayerDecorator(sarahContext, new FreeboxAirMedia(freeboxConf), new KinectDetector(sarahContext), new JsonStore(directory+'tmp/waiting.json'))
-//		new WaitPresencePlayerDecorator(sarahContext, new FreeboxAirMedia(freeboxConf), new RandomDetector(5000, 10000), new JsonStore(directory+'tmp/waiting.json'))
+		new WaitPresencePlayerDecorator(sarahContext, new FreeboxAirMedia(freeboxConf), new KinectDetector(sarahContext), new JsonStore(directory+'tmp/waiting.json')),
+//		new WaitPresencePlayerDecorator(sarahContext, new FreeboxAirMedia(freeboxConf), new RandomDetector(5000, 10000), new JsonStore(directory+'tmp/waiting.json')),
+		{
+			nothing: sarahContext.config.silent ? new NullNotifier() : new SpeakNotifier(sarahContext, 'Rien à télécharger'),
+			downloadStarted: sarahContext.config.silent ? new NullNotifier() : new SpeakNotifier(sarahContext, '${getSpeakName()} en cours de téléchargement'),
+			downloaded: new NullNotifier()
+		}
 	]);
 }
 

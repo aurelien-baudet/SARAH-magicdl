@@ -16,7 +16,11 @@ var RssSearch = require('../lib/search/RssSearch'),
 	EventEmitter = require('events').EventEmitter,
 	AndDetector = require('../lib/capabilities/AndDetector'),
 	JavaDetector = require('../lib/capabilities/JavaDetector'),
-	VlcDetector = require('../lib/capabilities/VlcDetector');
+	VlcDetector = require('../lib/capabilities/VlcDetector'),
+	NullNotifier = require('../lib/notify/NullNotifier'),
+	SpeakNotifier = require('../lib/notify/SpeakNotifier'),
+	PushingBoxNotifier = require('../lib/notify/PushingBoxNotifier'),
+	AskmePlayerDecorator = require('../lib/player/AskmePlayerDecorator');
 	
 
 /**
@@ -41,7 +45,12 @@ function RssCpasbienSeriesVlc(sarahContext) {
 		nameProviderFactory.seriesShortName(),
 		urlProviderFactory.cpasbien(),
 		new VuzeDownloader(new BestNameMatcher(function(download) { return download.TORRENT[0].NAME[0]; })),
-		new Vlc(sarahContext)
+		new AskmePlayerDecorator(sarahContext, new Vlc(sarahContext), '${getSpeakName()} est téléchargé. Veux-tu le regarder maintenant ?'),
+		{
+			nothing: sarahContext.config.silent ? new NullNotifier() : new SpeakNotifier(sarahContext, 'Rien à télécharger'),
+			downloadStarted: sarahContext.config.silent ? new NullNotifier() : new SpeakNotifier(sarahContext, '${getSpeakName()} en cours de téléchargement'),
+			downloaded: new NullNotifier()
+		}
 	]);
 }
 

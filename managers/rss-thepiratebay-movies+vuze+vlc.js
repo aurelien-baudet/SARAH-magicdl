@@ -14,7 +14,11 @@ var RssSearch = require('../lib/search/RssSearch'),
 	EventEmitter = require('events').EventEmitter,
 	AndDetector = require('../lib/capabilities/AndDetector'),
 	JavaDetector = require('../lib/capabilities/JavaDetector'),
-	VlcDetector = require('../lib/capabilities/VlcDetector');
+	VlcDetector = require('../lib/capabilities/VlcDetector'),
+	NullNotifier = require('../lib/notify/NullNotifier'),
+	SpeakNotifier = require('../lib/notify/SpeakNotifier'),
+	PushingBoxNotifier = require('../lib/notify/PushingBoxNotifier'),
+	AskmePlayerDecorator = require('../lib/player/AskmePlayerDecorator');
 	
 
 
@@ -31,8 +35,6 @@ var RssSearch = require('../lib/search/RssSearch'),
 function RssThepiratebayMoviesVuzeVlc(sarahContext) {
 	var directory = sarahContext.directory;
 	// TODO: path should be configurable
-	var conf = sarahContext.managerConf;
-	var freeboxConf = JSON.parse(require('fs').readFileSync(directory+'tmp/freeboxApp.json', 'utf8'));
 	Manager.apply(this, [
 		sarahContext,
 		new RssSearch("http://rss.thepiratebay.se/201"),
@@ -40,7 +42,12 @@ function RssThepiratebayMoviesVuzeVlc(sarahContext) {
 		nameProviderFactory.moviesShortName(),		// short name: remove all useless information that is not understandable when earing it
 		new NullUrlProvider(),
 		new VuzeDownloader(new BestNameMatcher(function(download) { return download.TORRENT[0].NAME[0]; })),
-		new Vlc(sarahContext)
+		new AskmePlayerDecorator(sarahContext, new Vlc(sarahContext), '${getSpeakName()} est téléchargé. Veux-tu le regarder maintenant ?'),
+		{
+			nothing: sarahContext.config.silent ? new NullNotifier() : new SpeakNotifier(sarahContext, 'Rien à télécharger'),
+			downloadStarted: sarahContext.config.silent ? new NullNotifier() : new SpeakNotifier(sarahContext, '${getSpeakName()} en cours de téléchargement'),
+			downloaded: new NullNotifier()
+		}
 	]);
 }
 
