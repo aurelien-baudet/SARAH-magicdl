@@ -8,7 +8,8 @@ var RssSearch = require('../lib/search/RssSearch'),
 	HtmlRegexpUrlProvider = require('../lib/urlProvider/HtmlRegexpUrlProvider'),
 	MockDownloader = require('../lib/downloader/MockDownloader'),
 	MockPlayer = require('../lib/player/MockPlayer'),
-	Manager = require('../lib/manager/StepByStepManager'),
+	Manager = require('../lib/manager/NotificationDecorator'),
+	StepByStepManager = require('../lib/manager/StepByStepManager'),
 	MemoryStore = require('../lib/store/MemoryStore'),
 	BestNameMatcher = require('../lib/matcher/BestNameMatcher'),
 	fs = require('fs'),
@@ -32,14 +33,16 @@ var RssSearch = require('../lib/search/RssSearch'),
  */
 function MoviesDevMode(sarahContext) {
 	Manager.apply(this, [
-		sarahContext,
-//		new RssSearch("http://www.cpasbien.pe/flux_rss.php?mainid=films"),
-		new SiteSearch("http://www.cpasbien.pe/derniers-torrents.php?filtre=films", ".torrent-aff", siteParserFactory.cpasbien),
-		new AndFilter(new UnreadFilter(new MemoryStore()), new AskFilter(sarahContext)),
-		nameProviderFactory.moviesShortName(),		// short name: remove all useless information that is not understandable when earing it
-		new HtmlRegexpUrlProvider(/href="(.+permalien=[^"]+)"/, "http://www.cpasbien.pe"),
-		new MockDownloader(),
-		new MockPlayer(),
+		new StepByStepManager(
+			sarahContext,
+//			new RssSearch("http://www.cpasbien.pe/flux_rss.php?mainid=films"),
+			new SiteSearch("http://www.cpasbien.pe/derniers-torrents.php?filtre=films", ".torrent-aff", siteParserFactory.cpasbien),
+			new AndFilter(new UnreadFilter(new MemoryStore()), new AskFilter(sarahContext)),
+			nameProviderFactory.moviesShortName(),		// short name: remove all useless information that is not understandable when earing it
+			new HtmlRegexpUrlProvider(/href="(.+permalien=[^"]+)"/, "http://www.cpasbien.pe"),
+			new MockDownloader(),
+			new MockPlayer()
+		),
 		{
 			nothing: new SpeakNotifier(sarahContext, 'Rien à télécharger'),
 			downloadStarted: new SpeakNotifier(sarahContext, '${getSpeakName()} en cours de téléchargement'),

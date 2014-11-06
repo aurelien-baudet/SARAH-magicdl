@@ -8,7 +8,8 @@ var RssSearch = require('../lib/search/RssSearch'),
 	urlProviderFactory = require('../lib/urlProvider/urlProviderFactory'),
 	VuzeDownloader = require('../lib/downloader/VuzeDownloader'),
 	Vlc = require('../lib/player/Vlc'),
-	Manager = require('../lib/manager/FullAsyncManager'),
+	Manager = require('../lib/manager/NotificationDecorator'),
+	FullAsyncManager = require('../lib/manager/FullAsyncManager'),
 	JsonStore = require('../lib/store/JsonStore'),
 	BestNameMatcher = require('../lib/matcher/BestNameMatcher'),
 	fs = require('fs'),
@@ -38,14 +39,16 @@ function RssCpasbienSeriesVlc(sarahContext) {
 	// TODO: path should be configurable
 	var conf = sarahContext.managerConf;
 	Manager.apply(this, [
-		sarahContext,
-//		new RssSearch("http://www.cpasbien.pe/flux_rss.php?mainid=series"),
-		new SiteSearch("http://www.cpasbien.pe/derniers-torrents.php?filtre=series", ".torrent-aff", siteParserFactory.cpasbien),
-		new AndFilter(new RegexpListFilter(conf.list), new UnreadFilter(new JsonStore(directory+'tmp/unread.json'))),
-		nameProviderFactory.seriesShortName(),
-		urlProviderFactory.cpasbien(),
-		new VuzeDownloader(new BestNameMatcher(function(download) { return download.TORRENT[0].NAME[0]; })),
-		new AskmePlayerDecorator(sarahContext, new Vlc(sarahContext), '${getSpeakName()} est téléchargé. Veux-tu le regarder maintenant ?'),
+		new FullAsyncManager(
+			sarahContext,
+//			new RssSearch("http://www.cpasbien.pe/flux_rss.php?mainid=series"),
+			new SiteSearch("http://www.cpasbien.pe/derniers-torrents.php?filtre=series", ".torrent-aff", siteParserFactory.cpasbien),
+			new AndFilter(new RegexpListFilter(conf.list), new UnreadFilter(new JsonStore(directory+'tmp/unread.json'))),
+			nameProviderFactory.seriesShortName(),
+			urlProviderFactory.cpasbien(),
+			new VuzeDownloader(new BestNameMatcher(function(download) { return download.TORRENT[0].NAME[0]; })),
+			new AskmePlayerDecorator(sarahContext, new Vlc(sarahContext), '${getSpeakName()} est téléchargé. Veux-tu le regarder maintenant ?')
+		),
 		{
 			nothing: sarahContext.config.silent ? new NullNotifier() : new SpeakNotifier(sarahContext, 'Rien à télécharger'),
 			downloadStarted: sarahContext.config.silent ? new NullNotifier() : new SpeakNotifier(sarahContext, '${getSpeakName()} en cours de téléchargement'),

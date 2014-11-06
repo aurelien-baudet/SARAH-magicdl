@@ -4,7 +4,7 @@
       "description": "Permet de rechercher, télécharger et lire des séries ou des films",
       "version" : "0.0.1",
 	  "pushingbox": {
-	  	"deviceid": ""
+	  	"deviceid": "v898422C9A6F1C96"
 	  }
     }
   },
@@ -12,10 +12,10 @@
     "magicdl" :   { 
       "name"       		: "magicdl",
       "description"		: "",
-      "time"       		: "*/30 * * * *",
+      "time"       		: "*/2 * * * *",
 	  "silent"	: true,
 	  "pushingbox": {
-	  	"deviceid": ""
+	  	"deviceid": "v898422C9A6F1C96"
 	  }
     }
   }
