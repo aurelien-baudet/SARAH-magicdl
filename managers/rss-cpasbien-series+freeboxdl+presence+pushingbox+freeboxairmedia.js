@@ -52,11 +52,12 @@ function RssCpasbienSeriesFreebox(sarahContext) {
 //			new WaitPresencePlayerDecorator(sarahContext, new FreeboxAirMedia(freeboxConf), new RandomDetector(5000, 10000), new JsonStore(directory+'tmp/waiting.json')),
 		),
 		{
-			nothing: sarahContext.config.silent ? new NullNotifier() : new SpeakNotifier(sarahContext, 'Rien à télécharger'),
-			downloadStarted: sarahContext.config.silent ? new PushingBoxNotifier(sarahContext.config.pushingbox.deviceid, 'S.A.R.A.H. : ${getSpeakName()} en cours de téléchargement', '${getName()} en cours de téléchargement') : new SpeakNotifier(sarahContext, '${getSpeakName()} en cours de téléchargement'),
-			downloaded: sarahContext.config.silent ? new PushingBoxNotifier(sarahContext.config.pushingbox.deviceid, 'S.A.R.A.H. : ${getSpeakName()} est téléchargé', '${getName()} est téléchargé') : new SpeakNotifier(sarahContext, '${getSpeakName()} en cours de téléchargement')
+			nothing: new NullNotifier(),
+			downloadStarted: new PushingBoxNotifier(sarahContext.config.pushingbox.deviceid, 'S.A.R.A.H. : ${getSpeakName()} en cours de téléchargement', '${getName()} en cours de téléchargement'),
+			downloaded: new PushingBoxNotifier(sarahContext.config.pushingbox.deviceid, 'S.A.R.A.H. : ${getSpeakName()} est téléchargé', '${getName()} est téléchargé')
 		}
 	]);
+	this.register();
 }
 
 util.inherits(RssCpasbienSeriesFreebox, Manager);
