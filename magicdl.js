@@ -65,6 +65,7 @@ start = function(data, callback, config, SARAH) {
 				managerConf: getCommandConf(conf, data.command),
 				plugin: exports
 			});
+			instance.register();
 		}
 		instance[data.method || "run"]();
 	} else {

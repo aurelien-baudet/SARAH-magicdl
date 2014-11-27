@@ -19,6 +19,12 @@ function AutoDetectManager(sarahContext) {
 
 util.inherits(AutoDetectManager, EventEmitter);
 
+/**
+ * Register events and connect them to each point of the algorithm
+ */
+AutoDetectManager.prototype.register = function(/*Manager?*/manager) {
+	// nothing to do
+}
 
 /**
  * Delegate the run to the previously detected manager for the current action
@@ -47,6 +53,7 @@ AutoDetectManager.prototype.delegate = function(/*String*/method) {
 		if(!instance) {
 			// create a new instance
 			instance = instances[command] = new Manager(this.sarahContext);
+			instance.register();
 		}
 		// run it
 		instance[method]();

@@ -42,7 +42,7 @@ function RssCpasbienSeriesVlc(sarahContext) {
 		new FullAsyncManager(
 			sarahContext,
 //			new RssSearch("http://www.cpasbien.pe/flux_rss.php?mainid=series"),
-			new SiteSearch("http://www.cpasbien.pe/derniers-torrents.php?filtre=series", ".torrent-aff", siteParserFactory.cpasbien),
+			new SiteSearch("http://www.cpasbien.pe/derniers-torrents.php?filtre=series", siteParserFactory.cpasbien.itemSelector, siteParserFactory.cpasbien.itemParser),
 			new AndFilter(new RegexpListFilter(conf.list), new UnreadFilter(new JsonStore(directory+'tmp/unread.json'))),
 			nameProviderFactory.seriesShortName(),
 			urlProviderFactory.cpasbien(),

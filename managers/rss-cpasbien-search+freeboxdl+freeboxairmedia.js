@@ -41,7 +41,7 @@ function RssCpasbienSeriesFreebox(sarahContext) {
 		new FullAsyncManager(
 			sarahContext,
 //			new RssSearch("http://www.cpasbien.pe/flux_rss.php?mainid=series"),
-			new SiteSearch(conf.url, ".torrent-aff", siteParserFactory.cpasbien),
+			new SiteSearch(conf.url, siteParserFactory.cpasbien.itemSelector, siteParserFactory.cpasbien.itemParser),
 			new AndFilter(/*new RegexpListFilter(conf.list), */new UnreadFilter(new JsonStore(directory+'tmp/unread.json'))),
 			nameProviderFactory.seriesShortName(),
 			urlProviderFactory.cpasbien(),
