@@ -1,7 +1,6 @@
 {
 	"manual": {
 		"series": ["devmode-series", "rss-cpasbien-series+freeboxdl+freeboxairmedia", "rss-cpasbien-series+vuze+vlc"],
-		"movies": ["devmode-movies", "rss-cpasbien-movies+freeboxdl+freeboxairmedia", "rss-cpasbien-movies+vuze+vlc", "rss-thepiratebay-movies+freeboxdl+freeboxairmedia", "rss-thepiratebay-movies+vuze+vlc"],
 		"search": ["rss-cpasbien-search+freeboxdl+freeboxairmedia"]
 	},
 	"cron": {
