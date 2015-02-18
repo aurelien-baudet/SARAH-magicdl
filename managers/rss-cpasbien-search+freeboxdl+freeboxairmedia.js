@@ -8,13 +8,18 @@ var RssSearch = require('../lib/search/RssSearch'),
 	urlProviderFactory = require('../lib/urlProvider/urlProviderFactory'),
 	FreeboxDownloader = require('../lib/downloader/FreeboxDownloader'),
 	FreeboxAirMedia = require('../lib/player/FreeboxAirMedia'),
-	Manager = require('../lib/manager/FullAsyncManager'),
+	Manager = require('../lib/manager/NotificationDecorator'),
+	FullAsyncManager = require('../lib/manager/FullAsyncManager'),
 	JsonStore = require('../lib/store/JsonStore'),
 	BestNameMatcher = require('../lib/matcher/BestNameMatcher'),
 	fs = require('fs'),
 	util = require('util'),
 	EventEmitter = require('events').EventEmitter,
-	FreeboxDetector = require('../lib/capabilities/FreeboxDetector');
+	FreeboxDetector = require('../lib/capabilities/FreeboxDetector'),
+	NullNotifier = require('../lib/notify/NullNotifier'),
+	SpeakNotifier = require('../lib/notify/SpeakNotifier'),
+	PushingBoxNotifier = require('../lib/notify/PushingBoxNotifier'),
+	AskmePlayerDecorator = require('../lib/player/AskmePlayerDecorator');
 	
 
 /**
@@ -33,14 +38,21 @@ function RssCpasbienSeriesFreebox(sarahContext) {
 	var conf = sarahContext.managerConf;
 	var freeboxConf = JSON.parse(require('fs').readFileSync(directory+'tmp/freeboxApp.json', 'utf8'));
 	Manager.apply(this, [
-		sarahContext,
-//		new RssSearch("http://www.cpasbien.pe/flux_rss.php?mainid=series"),
-		new SiteSearch(conf.url, ".torrent-aff", siteParserFactory.cpasbien),
-		new AndFilter(/*new RegexpListFilter(conf.list), */new UnreadFilter(new JsonStore(directory+'tmp/unread.json'))),
-		nameProviderFactory.seriesShortName(),
-		urlProviderFactory.cpasbien(),
-		new FreeboxDownloader(freeboxConf, new BestNameMatcher(function(download) { return download.name; }), conf.list),
-		new FreeboxAirMedia(freeboxConf)
+		new FullAsyncManager(
+			sarahContext,
+//			new RssSearch("http://www.cpasbien.pe/flux_rss.php?mainid=series"),
+			new SiteSearch(conf.url, siteParserFactory.cpasbien.itemSelector, siteParserFactory.cpasbien.itemParser),
+			new AndFilter(/*new RegexpListFilter(conf.list), */new UnreadFilter(new JsonStore(directory+'tmp/unread.json'))),
+			nameProviderFactory.seriesShortName(),
+			urlProviderFactory.cpasbien(),
+			new FreeboxDownloader(freeboxConf, new BestNameMatcher(function(download) { return download.name; }), conf.list),
+			new AskmePlayerDecorator(sarahContext, new FreeboxAirMedia(freeboxConf), '${getSpeakName()} est téléchargé. Veux-tu le regarder maintenant ?')
+		),
+		{
+			nothing: sarahContext.config.silent ? new NullNotifier() : new SpeakNotifier(sarahContext, 'Rien à télécharger'),
+			downloadStarted: sarahContext.config.silent ? new NullNotifier() : new SpeakNotifier(sarahContext, '${getSpeakName()} en cours de téléchargement'),
+			downloaded: new NullNotifier()
+		}
 	]);
 }
 

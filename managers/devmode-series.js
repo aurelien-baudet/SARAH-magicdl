@@ -8,13 +8,18 @@ var RssSearch = require('../lib/search/RssSearch'),
 	HtmlRegexpUrlProvider = require('../lib/urlProvider/HtmlRegexpUrlProvider'),
 	MockDownloader = require('../lib/downloader/MockDownloader'),
 	MockPlayer = require('../lib/player/MockPlayer'),
-	Manager = require('../lib/manager/FullAsyncManager'),
+	Manager = require('../lib/manager/NotificationDecorator'),
+	FullAsyncManager = require('../lib/manager/FullAsyncManager'),
 	MemoryStore = require('../lib/store/MemoryStore'),
 	BestNameMatcher = require('../lib/matcher/BestNameMatcher'),
 	fs = require('fs'),
 	util = require('util'),
 	EventEmitter = require('events').EventEmitter,
-	EnvironmentVariableDetector = require('../lib/capabilities/EnvironmentVariableDetector');
+	EnvironmentVariableDetector = require('../lib/capabilities/EnvironmentVariableDetector'),
+	NullNotifier = require('../lib/notify/NullNotifier'),
+	SpeakNotifier = require('../lib/notify/SpeakNotifier'),
+	PushingBoxNotifier = require('../lib/notify/PushingBoxNotifier'),
+	AskmePlayerDecorator = require('../lib/player/AskmePlayerDecorator');
 	
 
 /**
@@ -30,14 +35,21 @@ var RssSearch = require('../lib/search/RssSearch'),
 function SeriesDevMode(sarahContext) {
 	var conf = sarahContext.managerConf;
 	Manager.apply(this, [
-		sarahContext,
-//		new RssSearch("http://www.cpasbien.pe/flux_rss.php?mainid=series"),
-		new SiteSearch("http://www.cpasbien.pe/derniers-torrents.php?filtre=series", ".torrent-aff", siteParserFactory.cpasbien),
-		new AndFilter(new RegexpListFilter(conf.list), new UnreadFilter(new MemoryStore())),
-		nameProviderFactory.seriesShortName(),
-		new HtmlRegexpUrlProvider(/href="(.+permalien=[^"]+)"/, "http://www.cpasbien.pe"),
-		new MockDownloader(),
-		new MockPlayer()
+		new FullAsyncManager(
+			sarahContext,
+//			new RssSearch("http://www.cpasbien.pe/flux_rss.php?mainid=series"),
+			new SiteSearch("http://www.cpasbien.pe/derniers-torrents.php?filtre=series", ".torrent-aff", siteParserFactory.cpasbien),
+			new AndFilter(new RegexpListFilter(conf.list), new UnreadFilter(new MemoryStore())),
+			nameProviderFactory.seriesShortName(),
+			new HtmlRegexpUrlProvider(/href="(.+permalien=[^"]+)"/, "http://www.cpasbien.pe"),
+			new MockDownloader(),
+			new AskmePlayerDecorator(sarahContext, new MockPlayer(), '${getSpeakName()} est téléchargé. Veux-tu le regarder maintenant ?')
+		),
+		{
+			nothing: new SpeakNotifier(sarahContext, 'Rien à télécharger'),
+			downloadStarted: new SpeakNotifier(sarahContext, '${getSpeakName()} en cours de téléchargement'),
+			downloaded: new PushingBoxNotifier(sarahContext.config.pushingbox.deviceid, 'S.A.R.A.H. : ${getSpeakName()} est téléchargé', '${getName()} est téléchargé')
+		}
 	]);
 }
 

@@ -8,7 +8,8 @@ var RssSearch = require('../lib/search/RssSearch'),
 	urlProviderFactory = require('../lib/urlProvider/urlProviderFactory'),
 	VuzeDownloader = require('../lib/downloader/VuzeDownloader'),
 	Vlc = require('../lib/player/Vlc'),
-	Manager = require('../lib/manager/StepByStepManager'),
+	Manager = require('../lib/manager/NotificationDecorator'),
+	StepByStepManager = require('../lib/manager/StepByStepManager'),
 	JsonStore = require('../lib/store/JsonStore'),
 	BestNameMatcher = require('../lib/matcher/BestNameMatcher'),
 	fs = require('fs'),
@@ -16,7 +17,11 @@ var RssSearch = require('../lib/search/RssSearch'),
 	EventEmitter = require('events').EventEmitter,
 	AndDetector = require('../lib/capabilities/AndDetector'),
 	JavaDetector = require('../lib/capabilities/JavaDetector'),
-	VlcDetector = require('../lib/capabilities/VlcDetector');
+	VlcDetector = require('../lib/capabilities/VlcDetector'),
+	NullNotifier = require('../lib/notify/NullNotifier'),
+	SpeakNotifier = require('../lib/notify/SpeakNotifier'),
+	PushingBoxNotifier = require('../lib/notify/PushingBoxNotifier'),
+	AskmePlayerDecorator = require('../lib/player/AskmePlayerDecorator');
 	
 
 /**
@@ -33,14 +38,21 @@ function RssCpasbienSeriesVlc(sarahContext) {
 	var directory = sarahContext.directory;
 	// TODO: path should be configurable
 	Manager.apply(this, [
-		sarahContext,
-//		new RssSearch("http://www.cpasbien.pe/flux_rss.php?mainid=films"),
-		new SiteSearch("http://www.cpasbien.pe/derniers-torrents.php?filtre=films", ".torrent-aff", siteParserFactory.cpasbien),
-		new AndFilter(new UnreadFilter(new JsonStore(directory+'tmp/unread.json')), new AskFilter(sarahContext)),
-		nameProviderFactory.moviesShortName(),		// short name: remove all useless information that is not understandable when earing it
-		urlProviderFactory.cpasbien(),
-		new VuzeDownloader(new BestNameMatcher(function(download) { return download.TORRENT[0].NAME[0]; })),
-		new Vlc(sarahContext)
+		new StepByStepManager(
+			sarahContext,
+//			new RssSearch("http://www.cpasbien.pe/flux_rss.php?mainid=films"),
+			new SiteSearch("http://www.cpasbien.pe/derniers-torrents.php?filtre=films", siteParserFactory.cpasbien.itemSelector, siteParserFactory.cpasbien.itemParser),
+			new AndFilter(new UnreadFilter(new JsonStore(directory+'tmp/unread.json')), new AskFilter(sarahContext)),
+			nameProviderFactory.moviesShortName(),		// short name: remove all useless information that is not understandable when earing it
+			urlProviderFactory.cpasbien(),
+			new AskmePlayerDecorator(sarahContext, new VuzeDownloader(new BestNameMatcher(function(download) { return download.TORRENT[0].NAME[0]; })), '${getSpeakName()} est téléchargé. Veux-tu le regarder maintenant ?'),
+			new AskmePlayerDecorator(sarahContext, new Vlc(sarahContext), '${getSpeakName()} est téléchargé. Veux-tu le regarder maintenant ?')
+		),
+		{
+			nothing: sarahContext.config.silent ? new NullNotifier() : new SpeakNotifier(sarahContext, 'Rien à télécharger'),
+			downloadStarted: sarahContext.config.silent ? new NullNotifier() : new SpeakNotifier(sarahContext, '${getSpeakName()} en cours de téléchargement'),
+			downloaded: new NullNotifier()
+		}
 	]);
 }
 
