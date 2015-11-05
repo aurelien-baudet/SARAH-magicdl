@@ -1,6 +1,6 @@
 var RssSearch = require('../lib/search/RssSearch'),
 	SiteSearch = require('../lib/search/SiteSearch'),
-	siteParserFactory = require('../lib/search/siteParserFactory'),
+	config = require('../lib/config/cpasbien'),
 	AndFilter = require('../lib/filter/AndFilter'),
 	RegexpListFilter = require('../lib/filter/RegexpListFilter'),
 	UnreadFilter = require('../lib/filter/UnreadFilter'),
@@ -18,7 +18,6 @@ var RssSearch = require('../lib/search/RssSearch'),
 	util = require('util'),
 	EventEmitter = require('events').EventEmitter,
 	FreeboxDetector = require('../lib/capabilities/FreeboxDetector'),
-	urlProviderFactory = require('../lib/urlProvider/urlProviderFactory'),
 	NullNotifier = require('../lib/notify/NullNotifier'),
 	SpeakNotifier = require('../lib/notify/SpeakNotifier'),
 	PushingBoxNotifier = require('../lib/notify/PushingBoxNotifier');
@@ -43,11 +42,10 @@ function RssCpasbienSeriesFreebox(sarahContext) {
 		new FullAsyncManager(
 			sarahContext,
 //			new RssSearch("http://www.cpasbien.pe/flux_rss.php?mainid=series"),
-			new SiteSearch("http://www.cpasbien.pe/derniers-torrents.php?filtre=series-vostfr", siteParserFactory.cpasbien.itemSelector, siteParserFactory.cpasbien.itemParser),
-			new SiteSearch("http://www.cpasbien.pe/derniers-torrents.php?filtre=series-vostfr", siteParserFactory.cpasbien.itemSelector, siteParserFactory.cpasbien.itemParser),
+			new SiteSearch(config.searchSeriesUrl(), config.searchItemSelector(), config.siteParser),
 			new AndFilter(new RegexpListFilter(conf.list), new UnreadFilter(new JsonStore(directory+'tmp/unread.json'))),
 			nameProviderFactory.seriesShortName(),
-			urlProviderFactory.cpasbien(),
+			config.urlProvider(),
 			new FreeboxDownloader(freeboxConf, new BestNameMatcher(function(download) { return download.name; }), conf.list),
 			new WaitPresencePlayerDecorator(sarahContext, new FreeboxAirMedia(freeboxConf), new KinectDetector(sarahContext), new JsonStore(directory+'tmp/waiting.json'))
 //			new WaitPresencePlayerDecorator(sarahContext, new FreeboxAirMedia(freeboxConf), new RandomDetector(5000, 10000), new JsonStore(directory+'tmp/waiting.json'))

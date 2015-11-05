@@ -1,11 +1,10 @@
 var RssSearch = require('../lib/search/RssSearch'),
 	SiteSearch = require('../lib/search/SiteSearch')
-	siteParserFactory = require('../lib/search/siteParserFactory'),
+	config = require('../lib/config/cpasbien'),
 	AndFilter = require('../lib/filter/AndFilter'),
 	RegexpListFilter = require('../lib/filter/RegexpListFilter'),
 	UnreadFilter = require('../lib/filter/UnreadFilter'),
 	nameProviderFactory = require('../lib/nameProvider/factory'),
-	urlProviderFactory = require('../lib/urlProvider/urlProviderFactory'),
 	VuzeDownloader = require('../lib/downloader/VuzeDownloader'),
 	Vlc = require('../lib/player/Vlc'),
 	Manager = require('../lib/manager/NotificationDecorator'),
@@ -42,10 +41,10 @@ function RssCpasbienSeriesVlc(sarahContext) {
 		new FullAsyncManager(
 			sarahContext,
 //			new RssSearch("http://www.cpasbien.pe/flux_rss.php?mainid=series"),
-			new SiteSearch("http://www.cpasbien.pe/derniers-torrents.php?filtre=series", siteParserFactory.cpasbien.itemSelector, siteParserFactory.cpasbien.itemParser),
+			new SiteSearch(config.searchSeriesUrl(), config.searchItemSelector(), config.siteParser),
 			new AndFilter(new RegexpListFilter(conf.list), new UnreadFilter(new JsonStore(directory+'tmp/unread.json'))),
 			nameProviderFactory.seriesShortName(),
-			urlProviderFactory.cpasbien(),
+			config.urlProvider(),
 			new VuzeDownloader(new BestNameMatcher(function(download) { return download.TORRENT[0].NAME[0]; })),
 			new AskmePlayerDecorator(sarahContext, new Vlc(sarahContext), '${getSpeakName()} est téléchargé. Veux-tu le regarder maintenant ?')
 		),

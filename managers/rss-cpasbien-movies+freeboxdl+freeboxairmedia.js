@@ -1,11 +1,10 @@
 var RssSearch = require('../lib/search/RssSearch'),
 	SiteSearch = require('../lib/search/SiteSearch')
-	siteParserFactory = require('../lib/search/siteParserFactory'),
+	config = require('../lib/config/cpasbien'),
 	AndFilter = require('../lib/filter/AndFilter'),
 	AskFilter = require('../lib/filter/AskFilter'),
 	UnreadFilter = require('../lib/filter/UnreadFilter'),
 	nameProviderFactory = require('../lib/nameProvider/factory'),
-	urlProviderFactory = require('../lib/urlProvider/urlProviderFactory'),
 	FreeboxDownloader = require('../lib/downloader/FreeboxDownloader'),
 	FreeboxAirMedia = require('../lib/player/FreeboxAirMedia'),
 	Manager = require('../lib/manager/NotificationDecorator'),
@@ -41,10 +40,10 @@ function RssCpasbienMoviesFreebox(sarahContext) {
 		new StepByStepManager(
 			sarahContext,
 //			new RssSearch("http://www.cpasbien.pe/flux_rss.php?mainid=films"),
-			new SiteSearch("http://www.cpasbien.pe/derniers-torrents.php?filtre=films", siteParserFactory.cpasbien.itemSelector, siteParserFactory.cpasbien.itemParser),
+			new SiteSearch(config.searchMoviesUrl(), config.searchItemSelector(), config.siteParser),
 			new AndFilter(new UnreadFilter(new JsonStore(directory+'tmp/unread.json')), new AskFilter(sarahContext)),
 			nameProviderFactory.moviesShortName(),		// short name: remove all useless information that is not understandable when earing it
-			urlProviderFactory.cpasbien(),
+			config.urlProvider(),
 			new FreeboxDownloader(freeboxConf, new BestNameMatcher(function(download) { return download.name; }), conf.list),
 			new AskmePlayerDecorator(sarahContext, new FreeboxAirMedia(freeboxConf), '${getSpeakName()} est téléchargé. Veux-tu le regarder maintenant ?')
 		),

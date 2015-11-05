@@ -1,11 +1,10 @@
 var RssSearch = require('../lib/search/RssSearch'),
 	SiteSearch = require('../lib/search/SiteSearch')
-	siteParserFactory = require('../lib/search/siteParserFactory'),
+	config = require('../lib/config/cpasbien'),
 	AndFilter = require('../lib/filter/AndFilter'),
 	AskFilter = require('../lib/filter/AskFilter'),
 	UnreadFilter = require('../lib/filter/UnreadFilter'),
 	nameProviderFactory = require('../lib/nameProvider/factory'),
-	HtmlRegexpUrlProvider = require('../lib/urlProvider/HtmlRegexpUrlProvider'),
 	MockDownloader = require('../lib/downloader/MockDownloader'),
 	MockPlayer = require('../lib/player/MockPlayer'),
 	Manager = require('../lib/manager/NotificationDecorator'),
@@ -36,10 +35,10 @@ function MoviesDevMode(sarahContext) {
 		new StepByStepManager(
 			sarahContext,
 //			new RssSearch("http://www.cpasbien.pe/flux_rss.php?mainid=films"),
-			new SiteSearch("http://www.cpasbien.pe/derniers-torrents.php?filtre=films", ".torrent-aff", siteParserFactory.cpasbien),
+			new SiteSearch(config.searchMoviesUrl(), config.searchItemSelector(), config.siteParser),
 			new AndFilter(new UnreadFilter(new MemoryStore()), new AskFilter(sarahContext)),
 			nameProviderFactory.moviesShortName(),		// short name: remove all useless information that is not understandable when earing it
-			new HtmlRegexpUrlProvider(/href="(.+permalien=[^"]+)"/, "http://www.cpasbien.pe"),
+			config.urlProvider(),
 			new MockDownloader(),
 			new MockPlayer()
 		),

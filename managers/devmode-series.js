@@ -1,11 +1,10 @@
 var RssSearch = require('../lib/search/RssSearch'),
 	SiteSearch = require('../lib/search/SiteSearch')
-	siteParserFactory = require('../lib/search/siteParserFactory'),
+	config = require('../lib/config/cpasbien'),
 	AndFilter = require('../lib/filter/AndFilter'),
 	RegexpListFilter = require('../lib/filter/RegexpListFilter'),
 	UnreadFilter = require('../lib/filter/UnreadFilter'),
 	nameProviderFactory = require('../lib/nameProvider/factory'),
-	HtmlRegexpUrlProvider = require('../lib/urlProvider/HtmlRegexpUrlProvider'),
 	MockDownloader = require('../lib/downloader/MockDownloader'),
 	MockPlayer = require('../lib/player/MockPlayer'),
 	Manager = require('../lib/manager/NotificationDecorator'),
@@ -38,10 +37,10 @@ function SeriesDevMode(sarahContext) {
 		new FullAsyncManager(
 			sarahContext,
 //			new RssSearch("http://www.cpasbien.pe/flux_rss.php?mainid=series"),
-			new SiteSearch("http://www.cpasbien.pe/derniers-torrents.php?filtre=series", ".torrent-aff", siteParserFactory.cpasbien),
+			new SiteSearch(config.searchSeriesUrl(), config.searchItemSelector(), config.siteParser),
 			new AndFilter(new RegexpListFilter(conf.list), new UnreadFilter(new MemoryStore())),
 			nameProviderFactory.seriesShortName(),
-			new HtmlRegexpUrlProvider(/href="(.+permalien=[^"]+)"/, "http://www.cpasbien.pe"),
+			config.urlProvider(),
 			new MockDownloader(),
 			new AskmePlayerDecorator(sarahContext, new MockPlayer(), '${getSpeakName()} est téléchargé. Veux-tu le regarder maintenant ?')
 		),

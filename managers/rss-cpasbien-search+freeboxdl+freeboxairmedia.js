@@ -1,11 +1,10 @@
 var RssSearch = require('../lib/search/RssSearch'),
 	SiteSearch = require('../lib/search/SiteSearch')
-	siteParserFactory = require('../lib/search/siteParserFactory'),
+	config = require('../lib/config/cpasbien'),
 	AndFilter = require('../lib/filter/AndFilter'),
 	RegexpListFilter = require('../lib/filter/RegexpListFilter'),
 	UnreadFilter = require('../lib/filter/UnreadFilter'),
 	nameProviderFactory = require('../lib/nameProvider/factory'),
-	urlProviderFactory = require('../lib/urlProvider/urlProviderFactory'),
 	FreeboxDownloader = require('../lib/downloader/FreeboxDownloader'),
 	FreeboxAirMedia = require('../lib/player/FreeboxAirMedia'),
 	Manager = require('../lib/manager/NotificationDecorator'),
@@ -41,10 +40,10 @@ function RssCpasbienSeriesFreebox(sarahContext) {
 		new FullAsyncManager(
 			sarahContext,
 //			new RssSearch("http://www.cpasbien.pe/flux_rss.php?mainid=series"),
-			new SiteSearch(conf.url, siteParserFactory.cpasbien.itemSelector, siteParserFactory.cpasbien.itemParser),
+			new SiteSearch(conf.url, config.searchItemSelector(), config.siteParser),
 			new AndFilter(/*new RegexpListFilter(conf.list), */new UnreadFilter(new JsonStore(directory+'tmp/unread.json'))),
 			nameProviderFactory.seriesShortName(),
-			urlProviderFactory.cpasbien(),
+			config.urlProvider(),
 			new FreeboxDownloader(freeboxConf, new BestNameMatcher(function(download) { return download.name; }), conf.list),
 			new AskmePlayerDecorator(sarahContext, new FreeboxAirMedia(freeboxConf), '${getSpeakName()} est téléchargé. Veux-tu le regarder maintenant ?')
 		),
