@@ -1,9 +1,10 @@
 {
 	"manual": {
-		"series": ["devmode-series", "rss-cpasbien-series+freeboxdl+freeboxairmedia", "rss-cpasbien-series+vuze+vlc"],
-		"search": ["rss-cpasbien-search+freeboxdl+freeboxairmedia"]
+		"series": ["devmode-series", "torrent9-series+freeboxdl+freeboxairmedia", "torrent9-series+vuze+vlc"],
+		"movies": ["devmode-movies", "torrent9-movies+freeboxdl+freeboxairmedia", "torrent9-movies+vuze+vlc"],
+		"search": ["torrent9-search+freeboxdl+freeboxairmedia"]
 	},
 	"cron": {
-		"series": ["devmode-series", "rss-cpasbien-series+freeboxdl+presence+pushingbox+freeboxairmedia"]
+		"series": ["devmode-series", "torrent9-series+freeboxdl+presence+pushingbox+freeboxairmedia"]
 	}
 }
