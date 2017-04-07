@@ -1,10 +1,10 @@
 {
 	"manual": {
-		"series": ["devmode-series", "torrent9-series+freeboxdl+freeboxairmedia", "torrent9-series+vuze+vlc"],
-		"movies": ["devmode-movies", "torrent9-movies+freeboxdl+freeboxairmedia", "torrent9-movies+vuze+vlc"],
-		"search": ["torrent9-search+freeboxdl+freeboxairmedia"]
+		"series": ["devmode-series", "nextorrent/series+freeboxdl+freeboxairmedia", "nextorrent/series+vuze+vlc"],
+		"movies": ["devmode-movies", "nextorrent/movies+freeboxdl+freeboxairmedia", "nextorrent/movies+vuze+vlc"],
+		"search": ["nextorrent/search+freeboxdl+freeboxairmedia"]
 	},
 	"cron": {
-		"series": ["devmode-series", "torrent9-series+freeboxdl+presence+pushingbox+freeboxairmedia"]
+		"series": ["devmode-series", "nextorrent/series+freeboxdl+presence+pushingbox+freeboxairmedia"]
 	}
 }
